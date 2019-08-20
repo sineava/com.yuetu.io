@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.MerchandiseShiftBSDao">
+    <select id="getVoucher" resultType="map">
+        SELECT
+        t1.CKMC1 CKMC1,
+        COUNT ( t1.CKMC1 ) AS TOTAL,
+        SUM ( CBJE ) CBJE
+        FROM
+        (
+        SELECT
+        temp.CKMC1,
+        temp.CKMC,
+        CBJE
+        FROM
+        (
+        SELECT
+        CKMC1,
+        CKMC,
+        CONVERT ( DECIMAL ( 18, 2 ), SUM ( CBJE ) ) CBJE
+        FROM
+        (
+        SELECT
+        VW_SPYCD.RQ AS RQ,
+        VW_SPYCD.DJBH,
+        QUDAO.QDMC,
+        CANGKU1.CKMC AS CKMC1,
+        CANGKU.CKMC,
+        FHLX.LXMC AS FHMC,
+        VW_SPYCD.ZDR,
+        VW_SPYCD.BZ,
+        VW_SPYCD.ZY,
+        SHANGPIN.SPDM,
+        SHANGPIN.SPMC,
+        PINPAI.PPMC,
+        DALEI.DLMC,
+        JIJIE.JJMC,
+        SHANGPIN.BYZD8 AS SPNF,
+        SHANGPIN.BZSJ AS BZSJ,
+        VW_SPYCD.CKJ,
+        VW_SPYCD.DJ,
+        SUM ( VW_SPYCD.SL ) AS SL,
+        SUM ( VW_SPYCD.SL* SHANGPIN.BZSJ ) AS BZJE,
+        SUM ( VW_SPYCD.JE ) AS JE,
+        VW_SPYCD.DJ_3 AS CBDJ,
+        SUM ( VW_SPYCD.SL* VW_SPYCD.DJ_3 ) AS CBJE,
+        PICI.PCDM,
+        PICI.PCMC
+        FROM
+        VW_SPYCD
+        LEFT JOIN PICI ON VW_SPYCD.PCDM= PICI.PCDM ,
+        CANGKU AS CANGKU1,
+        CANGKU,
+        KUWEI ( NOLOCK ),
+        SHANGPIN,
+        PINPAI ( NOLOCK ),
+        DALEI ( NOLOCK ),
+        JIJIE ( NOLOCK ),
+        QUDAO ( NOLOCK ),
+        FHLX ( NOLOCK )
+        WHERE
+        VW_SPYCD.SPDM= SHANGPIN.SPDM
+        AND VW_SPYCD.DM1= CANGKU1.CKDM
+        AND VW_SPYCD.DM2= CANGKU.CKDM
+        AND VW_SPYCD.DM2_1= KUWEI.KWDM
+        AND SHANGPIN.BYZD3= PINPAI.PPDM
+        AND SHANGPIN.BYZD4= DALEI.DLDM
+        AND SHANGPIN.BYZD5= JIJIE.JJDM
+        AND QUDAO.QDDM= VW_SPYCD.QDDM
+        AND VW_SPYCD.DM4= FHLX.LXDM
+        AND VW_SPYCD.RQ between #{lastMonth26} AND  #{currentMonth25}
+        GROUP BY
+        VW_SPYCD.RQ,
+        VW_SPYCD.DJBH,
+        QUDAO.QDMC,
+        CANGKU1.CKMC,
+        CANGKU.CKMC,
+        FHLX.LXMC,
+        VW_SPYCD.ZDR,
+        VW_SPYCD.BZ,
+        VW_SPYCD.ZY,
+        SHANGPIN.SPDM,
+        SHANGPIN.SPMC,
+        PINPAI.PPMC,
+        DALEI.DLMC,
+        JIJIE.JJMC,
+        SHANGPIN.BYZD8,
+        SHANGPIN.BZSJ,
+        VW_SPYCD.CKJ,
+        VW_SPYCD.DJ,
+        VW_SPYCD.DJ_3,
+        PICI.PCDM,
+        PICI.PCMC
+        ) AS t2
+        GROUP BY
+        t2.CKMC1,
+        t2.CKMC
+        ) AS temp
+        ) AS t1
+        GROUP BY
+        t1.CKMC1
+    </select>
+
+    <select id="getVoucherEntry" resultType="map">
+        SELECT
+        temp.CKMC1 CKMC1,
+        temp.CKMC CKMC,
+        CBJE
+        FROM
+        (
+        SELECT
+        CKMC1,
+        CKMC,
+        CONVERT ( DECIMAL ( 18, 2 ), SUM ( CBJE ) ) CBJE
+        FROM
+        (
+        SELECT
+        VW_SPYCD.RQ AS RQ,
+        VW_SPYCD.DJBH,
+        QUDAO.QDMC,
+        CANGKU1.CKMC AS CKMC1,
+        CANGKU.CKMC,
+        FHLX.LXMC AS FHMC,
+        VW_SPYCD.ZDR,
+        VW_SPYCD.BZ,
+        VW_SPYCD.ZY,
+        SHANGPIN.SPDM,
+        SHANGPIN.SPMC,
+        PINPAI.PPMC,
+        DALEI.DLMC,
+        JIJIE.JJMC,
+        SHANGPIN.BYZD8 AS SPNF,
+        SHANGPIN.BZSJ AS BZSJ,
+        VW_SPYCD.CKJ,
+        VW_SPYCD.DJ,
+        SUM ( VW_SPYCD.SL ) AS SL,
+        SUM ( VW_SPYCD.SL* SHANGPIN.BZSJ ) AS BZJE,
+        SUM ( VW_SPYCD.JE ) AS JE,
+        VW_SPYCD.DJ_3 AS CBDJ,
+        SUM ( VW_SPYCD.SL* VW_SPYCD.DJ_3 ) AS CBJE,
+        PICI.PCDM,
+        PICI.PCMC
+        FROM
+        VW_SPYCD
+        LEFT JOIN PICI ON VW_SPYCD.PCDM= PICI.PCDM ,
+        CANGKU AS CANGKU1,
+        CANGKU,
+        KUWEI ( NOLOCK ),
+        SHANGPIN,
+        PINPAI ( NOLOCK ),
+        DALEI ( NOLOCK ),
+        JIJIE ( NOLOCK ),
+        QUDAO ( NOLOCK ),
+        FHLX ( NOLOCK )
+        WHERE
+        VW_SPYCD.SPDM= SHANGPIN.SPDM
+        AND VW_SPYCD.DM1= CANGKU1.CKDM
+        AND VW_SPYCD.DM2= CANGKU.CKDM
+        AND VW_SPYCD.DM2_1= KUWEI.KWDM
+        AND SHANGPIN.BYZD3= PINPAI.PPDM
+        AND SHANGPIN.BYZD4= DALEI.DLDM
+        AND SHANGPIN.BYZD5= JIJIE.JJDM
+        AND QUDAO.QDDM= VW_SPYCD.QDDM
+        AND VW_SPYCD.DM4= FHLX.LXDM
+        AND VW_SPYCD.RQ BETWEEN #{lastMonth26} AND  #{currentMonth25}
+        GROUP BY
+        VW_SPYCD.RQ,
+        VW_SPYCD.DJBH,
+        QUDAO.QDMC,
+        CANGKU1.CKMC,
+        CANGKU.CKMC,
+        FHLX.LXMC,
+        VW_SPYCD.ZDR,
+        VW_SPYCD.BZ,
+        VW_SPYCD.ZY,
+        SHANGPIN.SPDM,
+        SHANGPIN.SPMC,
+        PINPAI.PPMC,
+        DALEI.DLMC,
+        JIJIE.JJMC,
+        SHANGPIN.BYZD8,
+        SHANGPIN.BZSJ,
+        VW_SPYCD.CKJ,
+        VW_SPYCD.DJ,
+        VW_SPYCD.DJ_3,
+        PICI.PCDM,
+        PICI.PCMC
+        ) AS t2
+        GROUP BY
+        t2.CKMC1,
+        t2.CKMC
+        ) AS temp
+        ORDER BY
+        temp.CKMC1
+    </select>
+</mapper>

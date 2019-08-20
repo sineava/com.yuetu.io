@@ -1,0 +1,7 @@
+# 悦途核算科目-t_account表,此处数据为FAccountID字段
+prop:
+  subject:
+    #应付账款-2202
+    accountsPayable: 1028
+    #库存商品-1405
+    stockGoods: 1012
