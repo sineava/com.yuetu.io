@@ -40,3 +40,7 @@ XML配置方式暂无
 ---
 用户只需在service层使用注解@TargetDataSource("ds1")，其他配置不变，即可实现数据源动态切换，对代码入侵低，配置简单，非常方便老项目的迁移。
 
+悦途项目:
+说明: 结算项目更改请直接在resources/application.yml中直接进行配置,降低代码耦合度
+
+技术栈: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</code>
