@@ -49,6 +49,10 @@ public class VoucherUtil {
         return voucher;
     }
 
+    /**
+     * 返回包含凭证表分录默认数据的voucherEntry对象
+     * @return
+     */
     public static TvoucherEntry getVoucherEntry() {
         TvoucherEntry tvoucherEntry = new TvoucherEntry();
         //币别
