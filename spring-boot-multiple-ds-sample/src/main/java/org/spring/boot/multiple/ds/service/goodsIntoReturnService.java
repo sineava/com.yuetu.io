@@ -12,7 +12,7 @@ import java.util.List;
  * goodsReceipt:商品进货单
  * goodsReturnReceipt:商品退货单
  */
-public interface YueTuService {
+public interface goodsIntoReturnService {
     /**
      * 商品进货单-查询凭证所需数据(百盛)
      * @param date
@@ -55,5 +55,5 @@ public interface YueTuService {
      * @param tVoucherEntryList
      * @return
      */
-    int insertGoodsReturnReceiptVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) throws Exception;
+    void insertGoodsReturnReceiptVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) throws Exception;
 }

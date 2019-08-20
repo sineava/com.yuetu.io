@@ -14,6 +14,7 @@ import org.spring.boot.multiple.ds.util.DateUtil;
 import org.spring.boot.multiple.ds.util.VoucherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @date 2019/8/19
  * 商品移仓单impl
  */
+@SuppressWarnings("unchecked")
 @Service
 public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
 
@@ -91,7 +93,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 //摘要
                 tvoucherEntry.setFExplanation("");
                 //余额方向 0-贷方,1- 借方
-                tvoucherEntry.setFDC("1");
+                tvoucherEntry.setFDC("0");
                 //金额（原币）
                 tvoucherEntry.setFAmountFor(String.valueOf(map.get("CBJE")));
                 //金额(本位币)
@@ -106,6 +108,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
         return tVoucherEntryList;
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @TargetDataSource("ds1")
     @Override
     public void insertMerchandiseShiftVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) {
@@ -121,6 +124,64 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
             tvoucher.setFSerialNum(FVoucherID);
             //插入凭证数据到金蝶系统
             merchandiseShiftKingDeeDao.addVoucher(tvoucher);
+            //用于生成分录号
+            int i = 0;
+            //贷方数据
+            TvoucherEntry tvoucherEntryTotal = VoucherUtil.getVoucherEntry();
+            //根据仓库名称CKMC1查询对应的FItemID
+            Map<String,Object> fItemid = (Map<String, Object>) merchandiseShiftKingDeeDao.selectFItemID(tvoucher.getCredit());
+            if(fItemid == null || fItemid.isEmpty()) {
+                //核算项目
+                tvoucherEntryTotal.setFDetailID("0");
+            } else {
+                //核算项目
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+            }
+            //摘要
+            tvoucherEntryTotal.setFExplanation("");
+            //金额（原币）
+            tvoucherEntryTotal.setFAmountFor(tvoucher.getFDebitTotal());
+            //金额(本位币)
+            tvoucherEntryTotal.setFAmount(tvoucher.getFDebitTotal());
+            //贷方-CKMC1
+            tvoucherEntryTotal.setCredit(tvoucher.getCredit());
+            //TODO 科目内码以及对方科目待修改
+            //科目内码
+            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectAccountsPayable());
+            //对方科目
+            tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectStockGoods());
+            //凭证内码
+            tvoucherEntryTotal.setFVoucherID(FVoucherID);
+            //分录号
+            tvoucherEntryTotal.setFEntryID(String.valueOf(i));
+            //余额方向 0-贷方,1- 借方
+            tvoucherEntryTotal.setFDC("1");
+            merchandiseShiftKingDeeDao.addVoucherEntry(tvoucherEntryTotal);
+            i++;
+            for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
+                if(tvoucher.getCredit().equals(tVoucherEntry.getCredit())) {
+                    //根据仓库名称CKMC查询对应的FItemID
+                    Map<String,Object> ghsId = (Map<String, Object>) merchandiseShiftKingDeeDao.selectFItemID(tVoucherEntry.getDebit());
+                    if(ghsId == null || ghsId.isEmpty()) {
+                        //核算项目
+                        tVoucherEntry.setFDetailID("0");
+                    } else {
+                        //核算项目
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                    }
+                    //TODO 科目内码以及对方科目待修改
+                    //科目内码
+                    tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
+                    //对方科目
+                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectAccountsPayable());
+                    //凭证内码
+                    tVoucherEntry.setFVoucherID(FVoucherID);
+                    //分录号
+                    tVoucherEntry.setFEntryID(String.valueOf(i));
+                    merchandiseShiftKingDeeDao.addVoucherEntry(tVoucherEntry);
+                    i++;
+                }
+            }
         }
     }
 }

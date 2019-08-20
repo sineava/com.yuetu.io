@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface BSDao {
+public interface GoodsIntoReturnBSDao {
     List<Object> generatePurchase(DateInfo date);
 
     List<Object> selectEntry(DateInfo date);

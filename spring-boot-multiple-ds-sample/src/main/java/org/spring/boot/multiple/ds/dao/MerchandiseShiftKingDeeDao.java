@@ -1,6 +1,7 @@
 package org.spring.boot.multiple.ds.dao;
 
 import org.spring.boot.multiple.ds.bean.Tvoucher;
+import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,4 +25,18 @@ public interface MerchandiseShiftKingDeeDao {
      * @return
      */
     int addVoucher(Tvoucher tvoucher);
+
+    /**
+     * 根据字段值查询t_item表对应的FItemID
+     * @param debit
+     * @return
+     */
+    Object selectFItemID(String debit);
+
+    /**
+     * 新增凭证分录数据
+     * @param tvoucherEntryTotal: 分录数据
+     * @return
+     */
+    int addVoucherEntry(TvoucherEntry tvoucherEntryTotal);
 }

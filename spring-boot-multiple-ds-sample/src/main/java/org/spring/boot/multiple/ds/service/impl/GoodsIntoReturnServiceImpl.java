@@ -7,9 +7,9 @@ import org.spring.boot.multiple.ds.bean.DateInfo;
 import org.spring.boot.multiple.ds.bean.Tvoucher;
 import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.spring.boot.multiple.ds.bean.YmlProp;
-import org.spring.boot.multiple.ds.dao.BSDao;
-import org.spring.boot.multiple.ds.dao.KingDeeDao;
-import org.spring.boot.multiple.ds.service.YueTuService;
+import org.spring.boot.multiple.ds.dao.GoodsIntoReturnBSDao;
+import org.spring.boot.multiple.ds.dao.GoodsIntoReturnKingDeeDao;
+import org.spring.boot.multiple.ds.service.goodsIntoReturnService;
 import org.spring.boot.multiple.ds.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +23,17 @@ import java.util.Map;
 /**
  * @author 刘世杰
  * @date 2019/8/14
+ * 商品进退货impl
  */
 @SuppressWarnings("unchecked")
 @Service
-public class YueTuServiceImpl implements YueTuService {
+public class GoodsIntoReturnServiceImpl implements goodsIntoReturnService {
 
     @Autowired
-    KingDeeDao kingDeeDao;
+    GoodsIntoReturnKingDeeDao goodsIntoReturnKingDeeDao;
 
     @Autowired
-    BSDao bsDao;
+    GoodsIntoReturnBSDao goodsIntoReturnBsDao;
 
     @Autowired
     YmlProp ymlProp;
@@ -51,7 +52,7 @@ public class YueTuServiceImpl implements YueTuService {
     public List<Tvoucher> goodsReceiptVoucher(DateInfo date) {
         log.info("进入goodsReceiptVoucher方法,查询百盛商品进货单数据处理并生成单据集合");
         //百盛
-        List<Object> list = bsDao.generatePurchase(date);
+        List<Object> list = goodsIntoReturnBsDao.generatePurchase(date);
         DateInfo dateInfo = DateUtil.dateData();
         //凭证日期-本月25日
         String rq = dateInfo.getCurrentMonth25();
@@ -128,7 +129,7 @@ public class YueTuServiceImpl implements YueTuService {
     @Override
     public List<TvoucherEntry> goodsReceiptVoucherEntry(DateInfo date) {
         log.info("进入goodsReceiptVoucherEntry方法,查询百盛商品进货单数据处理并生成单据分录集合");
-        List<Object> list = bsDao.selectEntry(date);
+        List<Object> list = goodsIntoReturnBsDao.selectEntry(date);
         List<TvoucherEntry> tVoucherEntryList = new ArrayList<>();
         for(Object obj : list) {
             TvoucherEntry tvoucherEntry = new TvoucherEntry();
@@ -190,7 +191,7 @@ public class YueTuServiceImpl implements YueTuService {
         log.info("进入goodsReceiptVoucherEntry方法,插入商品进货单数据到金蝶凭证");
         for(Tvoucher tvoucher  : tVoucherList) {
             //查询最后插入的数据-没有自增主键,只能这么获取了
-            Tvoucher obj = kingDeeDao.selectLastVoucher();
+            Tvoucher obj = goodsIntoReturnKingDeeDao.selectLastVoucher();
             String FVoucherID;
             if(obj == null) {
                 FVoucherID = "0";
@@ -202,14 +203,14 @@ public class YueTuServiceImpl implements YueTuService {
             tvoucher.setFSerialNum(FVoucherID);
 
             //插入凭证数据到金蝶系统
-            kingDeeDao.insertPurchase(tvoucher);
+            goodsIntoReturnKingDeeDao.insertPurchase(tvoucher);
             //用于生成分录号
             int i = 0;
 
             //贷方数据
             TvoucherEntry tvoucherEntryTotal = new TvoucherEntry();
             //根据仓库名称查询id,放入核算项目
-            Map<String,Object> ckId = (Map<String, Object>) kingDeeDao.selectFNumber(tvoucher.getCKMC());
+            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC());
             if(ckId == null || ckId.isEmpty()) {
                 //核算项目
                 tvoucherEntryTotal.setFDetailID("0");
@@ -261,12 +262,12 @@ public class YueTuServiceImpl implements YueTuService {
             tvoucherEntryTotal.setFVoucherID(FVoucherID);
             //分录号
             tvoucherEntryTotal.setFEntryID(String.valueOf(i));
-            kingDeeDao.insertVoucherEntry(tvoucherEntryTotal);
+            goodsIntoReturnKingDeeDao.insertVoucherEntry(tvoucherEntryTotal);
             i++;
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
                 if(tvoucher.getCKMC().equals(tVoucherEntry.getCKMC())) {
                     //根据供货商名称查询id,放入核算项目
-                    Map<String,Object> ghsId = (Map<String, Object>) kingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
+                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
                     if(ghsId == null || ghsId.isEmpty()) {
                         //核算项目
                         tVoucherEntry.setFDetailID("0");
@@ -282,7 +283,7 @@ public class YueTuServiceImpl implements YueTuService {
                     tVoucherEntry.setFVoucherID(FVoucherID);
                     //分录号
                     tVoucherEntry.setFEntryID(String.valueOf(i));
-                    kingDeeDao.insertVoucherEntry(tVoucherEntry);
+                    goodsIntoReturnKingDeeDao.insertVoucherEntry(tVoucherEntry);
                     i++;
                 }
             }
@@ -299,7 +300,7 @@ public class YueTuServiceImpl implements YueTuService {
     public List<Tvoucher> goodsReturnReceiptVoucher(DateInfo date) {
         log.info("进入goodsReturnReceiptVoucher方法,查询百盛商品退货单数据处理并生成单据集合");
         //百盛--商品退货单
-        List<Object> list = bsDao.returnGoodsVoucher(date);
+        List<Object> list = goodsIntoReturnBsDao.returnGoodsVoucher(date);
         Calendar cal = Calendar.getInstance();
         List<Tvoucher> tVoucherList = new ArrayList<>();
         DateInfo dateInfo = DateUtil.dateData();
@@ -377,7 +378,7 @@ public class YueTuServiceImpl implements YueTuService {
     @Override
     public List<TvoucherEntry> goodsReturnVoucherEntry(DateInfo date) {
         log.info("进入goodsReturnVoucherEntry方法,查询百盛商品退货单数据处理并生成单据分录集合");
-        List<Object> list = bsDao.returnGoodsVoucherEntry(date);
+        List<Object> list = goodsIntoReturnBsDao.returnGoodsVoucherEntry(date);
         List<TvoucherEntry> tVoucherEntryList = new ArrayList<>();
         for(Object obj : list) {
             TvoucherEntry tvoucherEntry = new TvoucherEntry();
@@ -435,11 +436,11 @@ public class YueTuServiceImpl implements YueTuService {
     @Transactional(rollbackFor = {Exception.class})
     @TargetDataSource("ds1")
     @Override
-    public int insertGoodsReturnReceiptVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) {
+    public void insertGoodsReturnReceiptVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) {
         log.info("进入insertGoodsReturnReceiptVoucher方法,插入商品退货单数据到金蝶凭证");
         for(Tvoucher tvoucher  : tVoucherList) {
             //查询最后插入的数据-没有自增主键,只能这么获取了
-            Tvoucher obj = kingDeeDao.selectLastVoucher();
+            Tvoucher obj = goodsIntoReturnKingDeeDao.selectLastVoucher();
             String FVoucherID;
             if(obj == null) {
                 FVoucherID = "0";
@@ -451,7 +452,7 @@ public class YueTuServiceImpl implements YueTuService {
             tvoucher.setFSerialNum(FVoucherID);
 
             //插入凭证数据到金蝶系统
-            kingDeeDao.insertPurchase(tvoucher);
+            goodsIntoReturnKingDeeDao.insertPurchase(tvoucher);
             //更新刚才插入的凭证数据-折中方案,无法获取自增值,只能进行修改了
             //用于生成分录号
             int i = 0;
@@ -459,7 +460,7 @@ public class YueTuServiceImpl implements YueTuService {
             //贷方数据
             TvoucherEntry tvoucherEntryTotal = new TvoucherEntry();
             //根据仓库名称查询id,放入核算项目
-            Map<String,Object> ckId = (Map<String, Object>) kingDeeDao.selectFNumber(tvoucher.getCKMC());
+            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC());
             if(ckId == null || ckId.isEmpty()) {
                 //核算项目
                 tvoucherEntryTotal.setFDetailID("0");
@@ -511,12 +512,12 @@ public class YueTuServiceImpl implements YueTuService {
             tvoucherEntryTotal.setFVoucherID(FVoucherID);
             //分录号
             tvoucherEntryTotal.setFEntryID(String.valueOf(i));
-            kingDeeDao.insertVoucherEntry(tvoucherEntryTotal);
+            goodsIntoReturnKingDeeDao.insertVoucherEntry(tvoucherEntryTotal);
             i++;
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
                 if(tvoucher.getCKMC().equals(tVoucherEntry.getCKMC())) {
                     //根据供货商名称查询id,放入核算项目
-                    Map<String,Object> ghsId = (Map<String, Object>) kingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
+                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
                     if(ghsId == null || ghsId.isEmpty()) {
                         //核算项目
                         tVoucherEntry.setFDetailID("0");
@@ -532,11 +533,10 @@ public class YueTuServiceImpl implements YueTuService {
                     tVoucherEntry.setFVoucherID(FVoucherID);
                     //分录号
                     tVoucherEntry.setFEntryID(String.valueOf(i));
-                    kingDeeDao.insertVoucherEntry(tVoucherEntry);
+                    goodsIntoReturnKingDeeDao.insertVoucherEntry(tVoucherEntry);
                     i++;
                 }
             }
         }
-        return 0;
     }
 }

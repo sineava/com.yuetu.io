@@ -5,7 +5,7 @@ import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface KingDeeDao {
+public interface GoodsIntoReturnKingDeeDao {
 
     /**
      * 插入凭证数据

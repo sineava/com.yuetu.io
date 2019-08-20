@@ -4,7 +4,7 @@ import org.spring.boot.multiple.ds.bean.DateInfo;
 import org.spring.boot.multiple.ds.bean.Tvoucher;
 import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.spring.boot.multiple.ds.service.MerchandiseShiftService;
-import org.spring.boot.multiple.ds.service.YueTuService;
+import org.spring.boot.multiple.ds.service.goodsIntoReturnService;
 import org.spring.boot.multiple.ds.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,7 +25,7 @@ import java.util.List;
 public class YueTuController {
 
     @Autowired
-    private YueTuService yueTuService;
+    private goodsIntoReturnService goodsIntoReturnService;
 
     @Autowired
     private MerchandiseShiftService merchandiseShiftService;
@@ -41,9 +41,9 @@ public class YueTuController {
         try {
             //日期相关数据
             DateInfo date = DateUtil.dateData();
-            List<Tvoucher> tVoucherList = yueTuService.goodsReceiptVoucher(date);
-            List<TvoucherEntry> tVoucherEntryList = yueTuService.goodsReceiptVoucherEntry(date);
-            yueTuService.insertGoodsReceiptVoucher(tVoucherList,tVoucherEntryList);
+            List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReceiptVoucher(date);
+            List<TvoucherEntry> tVoucherEntryList = goodsIntoReturnService.goodsReceiptVoucherEntry(date);
+            goodsIntoReturnService.insertGoodsReceiptVoucher(tVoucherList,tVoucherEntryList);
         } catch (Exception e) {
             msg = e.getMessage();
         }
@@ -61,9 +61,9 @@ public class YueTuController {
         try {
             //日期相关数据
             DateInfo date = DateUtil.dateData();
-            List<Tvoucher> tVoucherList = yueTuService.goodsReturnReceiptVoucher(date);
-            List<TvoucherEntry> tVoucherEntryList = yueTuService.goodsReturnVoucherEntry(date);
-            yueTuService.insertGoodsReturnReceiptVoucher(tVoucherList,tVoucherEntryList);
+            List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReturnReceiptVoucher(date);
+            List<TvoucherEntry> tVoucherEntryList = goodsIntoReturnService.goodsReturnVoucherEntry(date);
+            goodsIntoReturnService.insertGoodsReturnReceiptVoucher(tVoucherList,tVoucherEntryList);
         } catch (Exception e) {
             msg = e.getMessage();
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.spring.boot.multiple.ds.dao.KingDeeDao" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.GoodsIntoReturnKingDeeDao" >
     <insert id="insertPurchase">
         INSERT INTO t_Voucher
              (FDate,  -- 凭证日期
@@ -139,6 +139,7 @@
     </update>
 
     <select id="selectFNumber" resultType="map">
-        select FItemID from t_item where FName = #{name}
+        -- 此处的5表示"仓库"-关联的是t_ItemClass表
+        select FItemID from t_item where FFullName = #{debit} and FItemClassID = 5;
     </select>
 </mapper>
