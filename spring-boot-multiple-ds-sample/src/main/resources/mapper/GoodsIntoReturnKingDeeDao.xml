@@ -139,7 +139,6 @@
     </update>
 
     <select id="selectFNumber" resultType="map">
-        -- 此处的5表示"仓库"-关联的是t_ItemClass表
-        select FItemID from t_item where FFullName = #{debit} and FItemClassID = 5;
+        select top 1 FItemID from t_item where FFullName = #{debit};
     </select>
 </mapper>
