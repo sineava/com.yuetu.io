@@ -18,4 +18,5 @@ technology stack: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</co
 #### 相关文件
 - [ERP开发科目清理](http://t.cn/AiQSS7k0)
 - [百盛数据字典](http://t.cn/AiQSoLTt)
+- [K3凭证导入相关库表描述](http://t.cn/AiQS9bOC)
 
