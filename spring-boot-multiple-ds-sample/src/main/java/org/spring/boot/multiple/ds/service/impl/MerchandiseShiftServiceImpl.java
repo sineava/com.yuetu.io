@@ -64,7 +64,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 //会计期间
                 voucher.setFPeriod(dateInfo.getCurrentMonth());
                 //摘要
-                voucher.setFExplanation("");
+                voucher.setFExplanation("摘要");
                 //分录数
                 voucher.setFEntryCount(String.valueOf(map.get("TOTAL")));
                 //借方金额合计
@@ -91,7 +91,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 TvoucherEntry tvoucherEntry = VoucherUtil.getVoucherEntry();
                 Map<String, Object> map = (Map<String, Object>) obj;
                 //摘要
-                tvoucherEntry.setFExplanation("");
+                tvoucherEntry.setFExplanation("摘要");
                 //余额方向 0-贷方,1- 借方
                 tvoucherEntry.setFDC("0");
                 //金额（原币）
@@ -138,16 +138,15 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
             }
             //摘要
-            tvoucherEntryTotal.setFExplanation("");
+            tvoucherEntryTotal.setFExplanation("摘要");
             //金额（原币）
             tvoucherEntryTotal.setFAmountFor(tvoucher.getFDebitTotal());
             //金额(本位币)
             tvoucherEntryTotal.setFAmount(tvoucher.getFDebitTotal());
             //贷方-CKMC1
             tvoucherEntryTotal.setCredit(tvoucher.getCredit());
-            //TODO 科目内码以及对方科目待修改
             //科目内码
-            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectAccountsPayable());
+            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectStockGoods());
             //对方科目
             tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectStockGoods());
             //凭证内码
@@ -169,11 +168,10 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                         //核算项目
                         tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
                     }
-                    //TODO 科目内码以及对方科目待修改
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
                     //对方科目
-                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectAccountsPayable());
+                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectStockGoods());
                     //凭证内码
                     tVoucherEntry.setFVoucherID(FVoucherID);
                     //分录号

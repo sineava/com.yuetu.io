@@ -79,7 +79,8 @@
 
     <select id="selectFItemID" resultType="map">
         -- 此处的5表示"仓库"-关联的是t_ItemClass表
-        select FItemID from t_item where FFullName = #{debit} and FItemClassID = 5;
+        -- 此处的1表示"客户"-关联的是t_ItemClass表
+        select FItemID from t_item where FFullName = #{debit} and FItemClassID = 1;
     </select>
 
     <insert id="addVoucherEntry">
