@@ -5,3 +5,9 @@ prop:
     accountsPayable: 1028
     #库存商品-1405
     stockGoods: 1012
+
+# 日志打印
+logging:
+  level: info
+  file: yuetu.log
+  root: INFO
