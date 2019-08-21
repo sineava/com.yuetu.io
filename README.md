@@ -16,6 +16,6 @@ technology stack: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</co
 > 借: 供货商(核算项目:应收账款);贷: 仓库(核算项目:库存商品)
 
 #### 相关文件
-![ERP开发科目清理](http://t.cn/AiQSS7k0)
-![百盛数据字典](http://t.cn/AiQSoLTt)
+- [ERP开发科目清理](http://t.cn/AiQSS7k0)
+- [百盛数据字典](http://t.cn/AiQSoLTt)
 
