@@ -9,7 +9,7 @@ import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.spring.boot.multiple.ds.bean.YmlProp;
 import org.spring.boot.multiple.ds.dao.GoodsIntoReturnBSDao;
 import org.spring.boot.multiple.ds.dao.GoodsIntoReturnKingDeeDao;
-import org.spring.boot.multiple.ds.service.goodsIntoReturnService;
+import org.spring.boot.multiple.ds.service.GoodsIntoReturnService;
 import org.spring.boot.multiple.ds.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 @Service
-public class GoodsIntoReturnServiceImpl implements goodsIntoReturnService {
+public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
 
     @Autowired
     GoodsIntoReturnKingDeeDao goodsIntoReturnKingDeeDao;
