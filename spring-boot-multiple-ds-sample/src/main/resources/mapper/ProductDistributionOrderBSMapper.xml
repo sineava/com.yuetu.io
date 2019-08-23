@@ -379,4 +379,381 @@
         ORDER BY
         t2.CKMC
     </select>
+
+    <select id="getReturnVoucher" resultType="map">
+        SELECT
+            CKMC,
+            COUNT ( 1 ) AS TOTAL,
+            CONVERT ( DECIMAL ( 18, 2 ), ABS(SUM ( CBJE ) )) CBJE
+        FROM
+            (
+                SELECT
+                    CKMC,
+                    COUNT ( 1 ) AS TOTAL,
+                    SUM ( F7 ) AS CBJE
+                FROM
+                    (
+                        SELECT
+                            QDMC,
+                            CKMC1,
+                            LBDM,
+                            LBMC,
+                            CKMC,
+                            SPDM,
+                            RQ,
+                            datepart( YEAR, RQ ) F1,
+                            datepart( quarter, RQ ) F2,
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ) F3,
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ) F4,
+                            DJMC,
+                            DJBH,
+                            QYMC,
+                            FHMC,
+                            YGMC,
+                            ZDR,
+                            BZ,
+                            ZY,
+                            SPMC,
+                            PPMC,
+                            DLMC,
+                            JJMC,
+                            SPNF,
+                            BZSJ,
+                            CKJ,
+                            PIC,
+                            BYZD7,
+                            PCDM,
+                            PCMC,
+                            SUM ( SL ) F5,
+                            SUM ( BZJE ) F6,
+                            SUM ( CBJE ) F7,
+                            SUM ( JE ) F8,
+                            SUM ( CKJE ) F9
+                        FROM
+                            (
+                                SELECT
+                                    VW_SDPHMX.RQ AS RQ,
+                                    VW_SDPHMX.DJMC,
+                                    VW_SDPHMX.DJBH,
+                                    QUYU.QYMC,
+                                    QUDAO.QDMC,
+                                    CANGKU1.CKMC AS CKMC1,
+                                    KEHU.LBDM,
+                                    KHLB.LBMC,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    FHLX.LXMC AS FHMC,
+                                    VW_SDPHMX.ZDR,
+                                    VW_SDPHMX.BZ,
+                                    VW_SDPHMX.ZY,
+                                    SHANGPIN.SPDM,
+                                    SHANGPIN.SPMC,
+                                    PINPAI.PPMC,
+                                    DALEI.DLMC,
+                                    JIJIE.JJMC,
+                                    SHANGPIN.BYZD8 AS SPNF,
+                                    VW_SDPHMX.CKJ,
+                                    SHANGPIN.BZSJ AS BZSJ,
+                                    SUM ( VW_SDPHMX.SL ) AS SL,
+                                    SUM ( VW_SDPHMX.SL* SHANGPIN.BZSJ ) AS BZJE,
+                                    SUM ( VW_SDPHMX.JE ) AS JE,
+                                    SUM ( VW_SDPHMX.SL* VW_SDPHMX.DJ_3 ) AS CBJE,
+                                    SUM ( VW_SDPHMX.CKJ* VW_SDPHMX.SL ) AS CKJE,
+                                    SHANGPIN.PIC,
+                                    VW_SDPHMX.BYZD7,
+                                    PICI.PCDM,
+                                    PICI.PCMC
+                                FROM
+                                    VW_SDPHMX
+                                        LEFT JOIN FZXX ON VW_SDPHMX.FZXX= FZXX.FZDM
+                                        LEFT JOIN PICI ON VW_SDPHMX.PCDM= PICI.PCDM ,
+                                    CANGKU AS CANGKU1,
+                                    KHLB,
+                                    KEHU,
+                                    CANGKU,
+                                    KUWEI ( NOLOCK ),
+                                    SHANGPIN
+                                        LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM= SHANGPIN.SPDM
+                                        LEFT JOIN GONGHUOSHANG ON SHANGPIN_A.GHSDM= GONGHUOSHANG.GHSDM ,
+                                    PINPAI ( NOLOCK ),
+                                    DALEI ( NOLOCK ),
+                                    JIJIE ( NOLOCK ),
+                                    QUDAO ( NOLOCK ),
+                                    QUYU ( NOLOCK ),
+                                    FHLX ( NOLOCK ),
+                                    YUANGONG ( NOLOCK )
+                                WHERE
+                                    VW_SDPHMX.SPDM= SHANGPIN.SPDM
+                                  AND VW_SDPHMX.DM1= CANGKU1.CKDM
+                                  AND KEHU.LBDM = KHLB.LBDM
+                                  AND KEHU.CKDM= VW_SDPHMX.DM1
+                                  AND VW_SDPHMX.DM2= CANGKU.CKDM
+                                  AND VW_SDPHMX.DM2_1= KUWEI.KWDM
+                                  AND SHANGPIN.BYZD3= PINPAI.PPDM
+                                  AND SHANGPIN.BYZD4= DALEI.DLDM
+                                  AND SHANGPIN.BYZD5= JIJIE.JJDM
+                                  AND QUDAO.QDDM= VW_SDPHMX.QDDM
+                                  AND CANGKU1.QYDM= QUYU.QYDM
+                                  AND VW_SDPHMX.YGDM= YUANGONG.YGDM
+                                  AND VW_SDPHMX.DM4= FHLX.LXDM
+                                  AND VW_SDPHMX.RQ BETWEEN '2019-07-24' AND '2019-08-23'
+                                GROUP BY
+                                    VW_SDPHMX.RQ,
+                                    VW_SDPHMX.DJMC,
+                                    VW_SDPHMX.DJBH,
+                                    QUYU.QYMC,
+                                    QUDAO.QDMC,
+                                    CANGKU1.CKMC,
+                                    KEHU.LBDM,
+                                    KHLB.LBMC,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    FHLX.LXMC,
+                                    VW_SDPHMX.ZDR,
+                                    VW_SDPHMX.BZ,
+                                    VW_SDPHMX.ZY,
+                                    SHANGPIN.SPDM,
+                                    SHANGPIN.SPMC,
+                                    PINPAI.PPMC,
+                                    DALEI.DLMC,
+                                    JIJIE.JJMC,
+                                    SHANGPIN.BYZD8,
+                                    VW_SDPHMX.CKJ,
+                                    SHANGPIN.BZSJ,
+                                    SHANGPIN.PIC,
+                                    VW_SDPHMX.BYZD7,
+                                    PICI.PCDM,
+                                    PICI.PCMC
+                            ) AS t1
+                        GROUP BY
+                            QDMC,
+                            CKMC1,
+                            LBDM,
+                            LBMC,
+                            CKMC,
+                            SPDM,
+                            RQ,
+                            datepart( YEAR, RQ ),
+                            datepart( quarter, RQ ),
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ),
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ),
+                            DJMC,
+                            DJBH,
+                            QYMC,
+                            FHMC,
+                            YGMC,
+                            ZDR,
+                            BZ,
+                            ZY,
+                            SPMC,
+                            PPMC,
+                            DLMC,
+                            JJMC,
+                            SPNF,
+                            BZSJ,
+                            CKJ,
+                            PIC,
+                            BYZD7,
+                            PCDM,
+                            PCMC
+                    ) AS temp
+                WHERE
+                    DJMC = '商店退货单'
+                  AND F7 != '.00000000'
+                GROUP BY
+                    temp.CKMC,
+                    CKMC1
+            ) AS t2
+        GROUP BY
+            t2.CKMC
+    </select>
+
+    <select id="getReturnVoucherEntry" resultType="map">
+        SELECT
+            t2.CKMC,
+            t2.CKMC1,
+            CONVERT ( DECIMAL ( 18, 2 ),ABS(CBJE)) CBJE
+        FROM
+            (
+                SELECT
+                    CKMC,
+                    CKMC1,
+                    COUNT ( 1 ) AS TOTAL,
+                    SUM ( F7 ) AS CBJE
+                FROM
+                    (
+                        SELECT
+                            QDMC,
+                            CKMC1,
+                            LBDM,
+                            LBMC,
+                            CKMC,
+                            SPDM,
+                            RQ,
+                            datepart( YEAR, RQ ) F1,
+                            datepart( quarter, RQ ) F2,
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ) F3,
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ) F4,
+                            DJMC,
+                            DJBH,
+                            QYMC,
+                            FHMC,
+                            YGMC,
+                            ZDR,
+                            BZ,
+                            ZY,
+                            SPMC,
+                            PPMC,
+                            DLMC,
+                            JJMC,
+                            SPNF,
+                            BZSJ,
+                            CKJ,
+                            PIC,
+                            BYZD7,
+                            PCDM,
+                            PCMC,
+                            SUM ( SL ) F5,
+                            SUM ( BZJE ) F6,
+                            SUM ( CBJE ) F7,
+                            SUM ( JE ) F8,
+                            SUM ( CKJE ) F9
+                        FROM
+                            (
+                                SELECT
+                                    VW_SDPHMX.RQ AS RQ,
+                                    VW_SDPHMX.DJMC,
+                                    VW_SDPHMX.DJBH,
+                                    QUYU.QYMC,
+                                    QUDAO.QDMC,
+                                    CANGKU1.CKMC AS CKMC1,
+                                    KEHU.LBDM,
+                                    KHLB.LBMC,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    FHLX.LXMC AS FHMC,
+                                    VW_SDPHMX.ZDR,
+                                    VW_SDPHMX.BZ,
+                                    VW_SDPHMX.ZY,
+                                    SHANGPIN.SPDM,
+                                    SHANGPIN.SPMC,
+                                    PINPAI.PPMC,
+                                    DALEI.DLMC,
+                                    JIJIE.JJMC,
+                                    SHANGPIN.BYZD8 AS SPNF,
+                                    VW_SDPHMX.CKJ,
+                                    SHANGPIN.BZSJ AS BZSJ,
+                                    SUM ( VW_SDPHMX.SL ) AS SL,
+                                    SUM ( VW_SDPHMX.SL* SHANGPIN.BZSJ ) AS BZJE,
+                                    SUM ( VW_SDPHMX.JE ) AS JE,
+                                    SUM ( VW_SDPHMX.SL* VW_SDPHMX.DJ_3 ) AS CBJE,
+                                    SUM ( VW_SDPHMX.CKJ* VW_SDPHMX.SL ) AS CKJE,
+                                    SHANGPIN.PIC,
+                                    VW_SDPHMX.BYZD7,
+                                    PICI.PCDM,
+                                    PICI.PCMC
+                                FROM
+                                    VW_SDPHMX
+                                        LEFT JOIN FZXX ON VW_SDPHMX.FZXX= FZXX.FZDM
+                                        LEFT JOIN PICI ON VW_SDPHMX.PCDM= PICI.PCDM ,
+                                    CANGKU AS CANGKU1,
+                                    KHLB,
+                                    KEHU,
+                                    CANGKU,
+                                    KUWEI ( NOLOCK ),
+                                    SHANGPIN
+                                        LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM= SHANGPIN.SPDM
+                                        LEFT JOIN GONGHUOSHANG ON SHANGPIN_A.GHSDM= GONGHUOSHANG.GHSDM ,
+                                    PINPAI ( NOLOCK ),
+                                    DALEI ( NOLOCK ),
+                                    JIJIE ( NOLOCK ),
+                                    QUDAO ( NOLOCK ),
+                                    QUYU ( NOLOCK ),
+                                    FHLX ( NOLOCK ),
+                                    YUANGONG ( NOLOCK )
+                                WHERE
+                                    VW_SDPHMX.SPDM= SHANGPIN.SPDM
+                                  AND VW_SDPHMX.DM1= CANGKU1.CKDM
+                                  AND KEHU.LBDM = KHLB.LBDM
+                                  AND KEHU.CKDM= VW_SDPHMX.DM1
+                                  AND VW_SDPHMX.DM2= CANGKU.CKDM
+                                  AND VW_SDPHMX.DM2_1= KUWEI.KWDM
+                                  AND SHANGPIN.BYZD3= PINPAI.PPDM
+                                  AND SHANGPIN.BYZD4= DALEI.DLDM
+                                  AND SHANGPIN.BYZD5= JIJIE.JJDM
+                                  AND QUDAO.QDDM= VW_SDPHMX.QDDM
+                                  AND CANGKU1.QYDM= QUYU.QYDM
+                                  AND VW_SDPHMX.YGDM= YUANGONG.YGDM
+                                  AND VW_SDPHMX.DM4= FHLX.LXDM
+                                  AND VW_SDPHMX.RQ BETWEEN '2019-07-23' AND '2019-08-22'
+                                GROUP BY
+                                    VW_SDPHMX.RQ,
+                                    VW_SDPHMX.DJMC,
+                                    VW_SDPHMX.DJBH,
+                                    QUYU.QYMC,
+                                    QUDAO.QDMC,
+                                    CANGKU1.CKMC,
+                                    KEHU.LBDM,
+                                    KHLB.LBMC,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    FHLX.LXMC,
+                                    VW_SDPHMX.ZDR,
+                                    VW_SDPHMX.BZ,
+                                    VW_SDPHMX.ZY,
+                                    SHANGPIN.SPDM,
+                                    SHANGPIN.SPMC,
+                                    PINPAI.PPMC,
+                                    DALEI.DLMC,
+                                    JIJIE.JJMC,
+                                    SHANGPIN.BYZD8,
+                                    VW_SDPHMX.CKJ,
+                                    SHANGPIN.BZSJ,
+                                    SHANGPIN.PIC,
+                                    VW_SDPHMX.BYZD7,
+                                    PICI.PCDM,
+                                    PICI.PCMC
+                            ) AS t1
+                        GROUP BY
+                            QDMC,
+                            CKMC1,
+                            LBDM,
+                            LBMC,
+                            CKMC,
+                            SPDM,
+                            RQ,
+                            datepart( YEAR, RQ ),
+                            datepart( quarter, RQ ),
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ),
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ),
+                            DJMC,
+                            DJBH,
+                            QYMC,
+                            FHMC,
+                            YGMC,
+                            ZDR,
+                            BZ,
+                            ZY,
+                            SPMC,
+                            PPMC,
+                            DLMC,
+                            JJMC,
+                            SPNF,
+                            BZSJ,
+                            CKJ,
+                            PIC,
+                            BYZD7,
+                            PCDM,
+                            PCMC
+                    ) AS temp
+                WHERE
+                    DJMC = '商店退货单'
+                  AND F7 != '.00000000'
+                GROUP BY
+                    temp.CKMC,
+                    CKMC1
+            ) AS t2
+        ORDER BY
+            t2.CKMC
+    </select>
 </mapper>

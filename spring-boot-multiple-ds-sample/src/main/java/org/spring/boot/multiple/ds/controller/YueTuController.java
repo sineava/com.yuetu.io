@@ -21,6 +21,7 @@ import java.util.List;
  * @author 刘世杰
  * GoodsIntoReturnService:商品进退货
  * MerchandiseShiftService:商品移仓单
+ * productDistributionOrder:商店配货退货单
  */
 @EnableScheduling
 @RestController
@@ -110,6 +111,26 @@ public class YueTuController {
             List<Tvoucher> tVoucherList = productDistributionOrderService.productDistributionOrderVoucher(date);
             List<TvoucherEntry> tVoucherEntryList = productDistributionOrderService.productDistributionOrderVoucherEntry(date);
             productDistributionOrderService.insertProductDistributionOrderVoucher(tVoucherList,tVoucherEntryList);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+        return msg;
+    }
+
+    /**
+     * 抽取商店退货单单据
+     * 每月25日定期执行-cron表达式
+     */
+    @Scheduled(cron = "0 0 0 25 * ?")
+    @RequestMapping("/storeReturnOrderVoucher")
+    public String storeReturnOrderVoucher() {
+        String msg = "success";
+        try {
+            //日期相关数据
+            DateInfo date = DateUtil.dateData();
+            List<Tvoucher> tVoucherList = productDistributionOrderService.storeReturnOrderVoucher(date);
+            List<TvoucherEntry> tVoucherEntryList = productDistributionOrderService.storeReturnOrderVoucherEntry(date);
+            productDistributionOrderService.insertStoreReturnOrderVoucher(tVoucherList,tVoucherEntryList);
         } catch (Exception e) {
             msg = e.getMessage();
         }

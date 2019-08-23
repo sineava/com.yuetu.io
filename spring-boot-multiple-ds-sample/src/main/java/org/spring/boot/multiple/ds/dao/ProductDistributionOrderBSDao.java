@@ -26,4 +26,18 @@ public interface ProductDistributionOrderBSDao {
      * @return
      */
     List<Object> getVoucherEntry(DateInfo date);
+
+    /**
+     * 查询商店退货单凭证数据(百盛)
+     * @param date
+     * @return
+     */
+    List<Object> getReturnVoucher(DateInfo date);
+
+    /**
+     * 查询商店退货单凭证分录数据(百盛)
+     * @param date
+     * @return
+     */
+    List<Object> getReturnVoucherEntry(DateInfo date);
 }
