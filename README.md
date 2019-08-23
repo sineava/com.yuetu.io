@@ -12,7 +12,7 @@ technology stack: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</co
 - [x] 商店配货单
 > 借: 商店(核算项目:库存商品);贷: 仓库(核算项目:库存商品)
 
-- [ ] 商店退货单
+- [x] 商店退货单
 > 借: 仓库(核算项目:库存商品);贷: 商店(核算项目:库存商品)
 
 - [x] 商品进货单
