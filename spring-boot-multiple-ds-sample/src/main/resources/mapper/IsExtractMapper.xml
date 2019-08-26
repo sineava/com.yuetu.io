@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.IsExtractDao">
+    <select id="isExtract" resultType="map">
+        SELECT TOP 1 * FROM t_isExtract WHERE name = #{type}
+    </select>
+
+    <update id="changeExtractStatus">
+        update t_isExtract set isExtract = 1 WHERE name = #{type}
+    </update>
+</mapper>
