@@ -68,7 +68,7 @@
         AND SHANGPIN.BYZD5= JIJIE.JJDM
         AND QUDAO.QDDM= VW_SPYCD.QDDM
         AND VW_SPYCD.DM4= FHLX.LXDM
-        AND VW_SPYCD.RQ between #{lastMonth26} AND  #{currentMonth25}
+        AND VW_SPYCD.RQ between #{lastMonthFirstDay} AND  #{lastMonthLastDay}
         GROUP BY
         VW_SPYCD.RQ,
         VW_SPYCD.DJBH,
@@ -162,7 +162,7 @@
         AND SHANGPIN.BYZD5= JIJIE.JJDM
         AND QUDAO.QDDM= VW_SPYCD.QDDM
         AND VW_SPYCD.DM4= FHLX.LXDM
-        AND VW_SPYCD.RQ BETWEEN #{lastMonth26} AND  #{currentMonth25}
+        AND VW_SPYCD.RQ BETWEEN #{lastMonthFirstDay} AND  #{lastMonthLastDay}
         GROUP BY
         VW_SPYCD.RQ,
         VW_SPYCD.DJBH,

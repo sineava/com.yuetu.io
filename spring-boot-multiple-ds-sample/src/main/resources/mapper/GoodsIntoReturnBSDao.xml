@@ -69,7 +69,7 @@
         AND QUDAO.QDDM= VW_SPJHMX.QDDM
         AND VW_SPJHMX.YGDM= YUANGONG.YGDM
         AND SHANGPIN.FJSX8= FJSX8.SXDM
-        AND VW_SPJHMX.RQ between #{lastMonth26} and #{currentMonth25}
+        AND VW_SPJHMX.RQ between #{lastMonthFirstDay} and #{lastMonthLastDay}
         GROUP BY
         VW_SPJHMX.RQ,
         VW_SPJHMX.SHRQ,
@@ -178,7 +178,7 @@
             AND QUDAO.QDDM= VW_SPJHMX.QDDM
             AND VW_SPJHMX.YGDM= YUANGONG.YGDM
             AND SHANGPIN.FJSX8= FJSX8.SXDM
-            AND VW_SPJHMX.RQ between #{lastMonth26} and #{currentMonth25}
+            AND VW_SPJHMX.RQ between #{lastMonthFirstDay} and #{lastMonthLastDay}
             GROUP BY
             VW_SPJHMX.RQ,
             VW_SPJHMX.SHRQ,
@@ -287,7 +287,7 @@
                           AND QUDAO.QDDM= VW_SPJHMX.QDDM
                           AND VW_SPJHMX.YGDM= YUANGONG.YGDM
                           AND SHANGPIN.FJSX8= FJSX8.SXDM
-                          AND VW_SPJHMX.RQ between #{lastMonth26} and #{currentMonth25}
+                          AND VW_SPJHMX.RQ between #{lastMonthFirstDay} and #{lastMonthLastDay}
                         GROUP BY
                             VW_SPJHMX.RQ,
                             VW_SPJHMX.SHRQ,
@@ -396,7 +396,7 @@
                        AND QUDAO.QDDM= VW_SPJHMX.QDDM
                        AND VW_SPJHMX.YGDM= YUANGONG.YGDM
                        AND SHANGPIN.FJSX8= FJSX8.SXDM
-                       AND VW_SPJHMX.RQ between #{lastMonth26} and #{currentMonth25}
+                       AND VW_SPJHMX.RQ between #{lastMonthFirstDay} and #{lastMonthLastDay}
                      GROUP BY
                          VW_SPJHMX.RQ,
                          VW_SPJHMX.SHRQ,

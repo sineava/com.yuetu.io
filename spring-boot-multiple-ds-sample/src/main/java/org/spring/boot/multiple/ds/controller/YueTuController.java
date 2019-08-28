@@ -24,6 +24,10 @@ import java.util.Map;
  * GoodsIntoReturnService:商品进退货
  * MerchandiseShiftService:商品移仓单
  * productDistributionOrder:商店配货退货单
+ * <explain>
+ * 商场销售抽取时间段: [上个月26日,本月25日]
+ * 商场销售外抽取时间段: [上个月1日,上个月最后1日]
+ * <explain/>
  */
 @EnableScheduling
 @RestController
@@ -44,16 +48,16 @@ public class YueTuController {
 
     /**
      * 抽取商品进货单据
-     * 每月25日定期执行-cron表达式
+     * 每月26日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 25 * ?")
+    @Scheduled(cron = "0 0 0 26 * ?")
     @RequestMapping("/goodsReceiptVoucher")
     public String goodsReceiptVoucher() {
         String msg = "success";
         try {
             Boolean isExtract = isExtract("商品进货单");
             //单据未抽取才能进行单据抽取
-            if(isExtract == false) {
+            if(!isExtract) {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReceiptVoucher(date);
@@ -71,16 +75,16 @@ public class YueTuController {
 
     /**
      * 抽取商品退货单据
-     * 每月25日定期执行-cron表达式
+     * 每月26日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 25 * ?")
+    @Scheduled(cron = "0 0 0 26 * ?")
     @RequestMapping("/goodsReturnReceiptVoucher")
     public String goodsReturnReceipt() {
         String msg = "success";
         Boolean isExtract = isExtract("商品退货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(isExtract == false) {
+            if(!isExtract) {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReturnReceiptVoucher(date);
@@ -98,16 +102,16 @@ public class YueTuController {
 
     /**
      * 抽取商品移仓单单据
-     * 每月25日定期执行-cron表达式
+     * 每月26日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 25 * ?")
+    @Scheduled(cron = "0 0 0 26 * ?")
     @RequestMapping("/merchandiseShiftVoucher")
     public String merchandiseShiftVoucher() {
         String msg = "success";
         Boolean isExtract = isExtract("商品移仓单");
         try {
             //单据未抽取才能进行单据抽取
-            if(isExtract == false) {
+            if(!isExtract) {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = merchandiseShiftService.merchandiseShiftVoucher(date);
@@ -125,16 +129,16 @@ public class YueTuController {
 
     /**
      * 抽取商店配货单单据
-     * 每月25日定期执行-cron表达式
+     * 每月26日定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 25 * ?")
+    @Scheduled(cron = "0 0 0 26 * ?")
     @RequestMapping("/productDistributionOrderVoucher")
     public String productDistributionOrderVoucher() {
         String msg = "success";
         Boolean isExtract = isExtract("商店配货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(isExtract == false) {
+            if(!isExtract) {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = productDistributionOrderService.productDistributionOrderVoucher(date);
@@ -152,16 +156,16 @@ public class YueTuController {
 
     /**
      * 抽取商店退货单单据
-     * 每月25日定期执行-cron表达式
+     * 每月26日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 25 * ?")
+    @Scheduled(cron = "0 0 0 26 * ?")
     @RequestMapping("/storeReturnOrderVoucher")
     public String storeReturnOrderVoucher() {
         String msg = "success";
         Boolean isExtract = isExtract("商店退货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(isExtract == false) {
+            if(!isExtract) {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = productDistributionOrderService.storeReturnOrderVoucher(date);
@@ -189,7 +193,7 @@ public class YueTuController {
             if(obj != null) {
                 Map<String,String> map = (Map<String,String>)obj;
                 String str = map.get("isExtract");
-                if(str.trim().equals("1")) {
+                if("1".equals(str.trim())) {
                     isExtract = true;
                 }
             }

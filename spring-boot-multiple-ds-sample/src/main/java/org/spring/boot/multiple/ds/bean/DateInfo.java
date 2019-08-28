@@ -27,4 +27,11 @@ public class DateInfo {
      */
     private String currentYear;
     private String currentMonth;
+
+    /**
+     * add: 2019/8/28
+     * 用于获取上月1号与最后一天
+     */
+    private String lastMonthFirstDay;
+    private String lastMonthLastDay;
 }
