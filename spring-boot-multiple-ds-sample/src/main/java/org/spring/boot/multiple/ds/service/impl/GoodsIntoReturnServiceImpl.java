@@ -54,8 +54,8 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
         //百盛
         List<Object> list = goodsIntoReturnBsDao.generatePurchase(date);
         DateInfo dateInfo = DateUtil.dateData();
-        //凭证日期-本月25日
-        String rq = dateInfo.getCurrentMonth25();
+        //凭证日期-当前时间
+        String rq = dateInfo.getCurrentTime();
         List<Tvoucher> tVoucherList = new ArrayList<>();
         //插入tVoucher凭证
         for (Object obj : list) {
@@ -308,8 +308,8 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
         for (Object obj : list) {
             Map<String,Object> map = (Map<String, Object>)obj;
             Tvoucher voucher = new Tvoucher();
-            //获取本月25日
-            String rq = dateInfo.getCurrentMonth25();
+            //获取当前时间
+            String rq = dateInfo.getCurrentTime();
             //凭证日期
             voucher.setFDate(rq);
             //业务日期

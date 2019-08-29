@@ -4,6 +4,7 @@ import org.spring.boot.multiple.ds.bean.DateInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 日期工具类
@@ -31,6 +32,15 @@ public class DateUtil {
         info.setLastMonthLastDay(sdf1.format(cal2.getTime()));
         cal2.set(Calendar.DAY_OF_MONTH,1);
         info.setLastMonthFirstDay(sdf1.format(cal2.getTime()));
+
+        Calendar cal3 = Calendar.getInstance();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM");
+        info.setCurrentMonth1(sdf2.format(cal3.getTime())+"-01");
+        info.setCurrentMonth26(sdf2.format(cal3.getTime())+"-26");
+
+        Date date = new Date();
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        info.setCurrentTime(sdf3.format(date));
         return info;
     }
 }

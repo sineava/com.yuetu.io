@@ -34,4 +34,17 @@ public class DateInfo {
      */
     private String lastMonthFirstDay;
     private String lastMonthLastDay;
+
+    /**
+     * add: 2019/8/29
+     * 用于获取本月1日以及26日
+     */
+    private String currentMonth1;
+    private String currentMonth26;
+
+    /**
+     * add: 2019/8/29
+     * 用于获取此时的年月日时分秒
+     */
+    private String currentTime;
 }

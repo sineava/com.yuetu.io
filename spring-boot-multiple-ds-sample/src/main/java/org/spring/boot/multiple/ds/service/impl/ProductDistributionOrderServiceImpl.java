@@ -56,9 +56,9 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 Map<String,Object> map = (Map<String, Object>)obj;
                 Tvoucher voucher = VoucherUtil.getVoucher();
                 //凭证日期
-                voucher.setFDate(dateInfo.getCurrentMonth25());
+                voucher.setFDate(dateInfo.getCurrentTime());
                 //业务日期
-                voucher.setFTransDate(dateInfo.getCurrentMonth25());
+                voucher.setFTransDate(dateInfo.getCurrentTime());
                 //年份
                 voucher.setFYear(dateInfo.getCurrentYear());
                 //会计期间
@@ -195,9 +195,9 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 Map<String,Object> map = (Map<String, Object>)obj;
                 Tvoucher voucher = VoucherUtil.getVoucher();
                 //凭证日期
-                voucher.setFDate(dateInfo.getCurrentMonth25());
+                voucher.setFDate(dateInfo.getCurrentTime());
                 //业务日期
-                voucher.setFTransDate(dateInfo.getCurrentMonth25());
+                voucher.setFTransDate(dateInfo.getCurrentTime());
                 //年份
                 voucher.setFYear(dateInfo.getCurrentYear());
                 //会计期间

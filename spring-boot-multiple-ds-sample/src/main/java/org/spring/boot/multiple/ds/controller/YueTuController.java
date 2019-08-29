@@ -48,9 +48,9 @@ public class YueTuController {
 
     /**
      * 抽取商品进货单据
-     * 每月26日0时定期执行-cron表达式
+     * 每月1日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 26 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/goodsReceiptVoucher")
     public String goodsReceiptVoucher() {
         String msg = "success";
@@ -75,9 +75,9 @@ public class YueTuController {
 
     /**
      * 抽取商品退货单据
-     * 每月26日0时定期执行-cron表达式
+     * 每月1日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 26 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/goodsReturnReceiptVoucher")
     public String goodsReturnReceipt() {
         String msg = "success";
@@ -102,9 +102,9 @@ public class YueTuController {
 
     /**
      * 抽取商品移仓单单据
-     * 每月26日0时定期执行-cron表达式
+     * 每月1日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 26 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/merchandiseShiftVoucher")
     public String merchandiseShiftVoucher() {
         String msg = "success";
@@ -129,9 +129,9 @@ public class YueTuController {
 
     /**
      * 抽取商店配货单单据
-     * 每月26日定期执行-cron表达式
+     * 每月1日定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 26 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/productDistributionOrderVoucher")
     public String productDistributionOrderVoucher() {
         String msg = "success";
@@ -156,9 +156,9 @@ public class YueTuController {
 
     /**
      * 抽取商店退货单单据
-     * 每月26日0时定期执行-cron表达式
+     * 每月1日0时定期执行-cron表达式
      */
-    @Scheduled(cron = "0 0 0 26 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/storeReturnOrderVoucher")
     public String storeReturnOrderVoucher() {
         String msg = "success";
