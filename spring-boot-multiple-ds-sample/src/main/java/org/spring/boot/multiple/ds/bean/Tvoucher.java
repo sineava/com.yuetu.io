@@ -56,4 +56,16 @@ public class Tvoucher {
      */
     private String debit;
     private String credit;
+
+    /**
+     * add 2019/8/29
+     * summary: 汇总核算科目
+     */
+    private String summary;
+
+    /**
+     * add 2019/8/30
+     * djbh: 通过单据编号将凭证List以及凭证分录List进行汇总
+     */
+    private String djbh;
 }

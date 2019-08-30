@@ -3,10 +3,7 @@ package org.spring.boot.multiple.ds.controller;
 import org.spring.boot.multiple.ds.bean.DateInfo;
 import org.spring.boot.multiple.ds.bean.Tvoucher;
 import org.spring.boot.multiple.ds.bean.TvoucherEntry;
-import org.spring.boot.multiple.ds.service.GoodsIntoReturnService;
-import org.spring.boot.multiple.ds.service.IsExtractService;
-import org.spring.boot.multiple.ds.service.MerchandiseShiftService;
-import org.spring.boot.multiple.ds.service.ProductDistributionOrderService;
+import org.spring.boot.multiple.ds.service.*;
 import org.spring.boot.multiple.ds.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,12 +21,14 @@ import java.util.Map;
  * @author 刘世杰
  * GoodsIntoReturnService:商品进退货
  * MerchandiseShiftService:商品移仓单
- * productDistributionOrder:商店配货退货单
+ * productDistributionOrderService:商店配货退货单
+ * incomingStatementService: 进货结算单
  * <explain>
  * 商场销售抽取时间段: [上个月26日,本月25日]
  * 商场销售外抽取时间段: [上个月1日,上个月最后1日]
  * <explain/>
  */
+@SuppressWarnings("unchecked")
 @EnableScheduling
 @RestController
 @Component
@@ -45,6 +45,9 @@ public class YueTuController {
 
     @Autowired
     private IsExtractService isExtractService;
+
+    @Autowired
+    private incomingStatementService incomingStatementService;
 
     /**
      * 抽取商品进货单据
@@ -177,6 +180,35 @@ public class YueTuController {
             }
         } catch (Exception e) {
             msg = e.getMessage();
+        }
+        return msg;
+    }
+
+    /**
+     * 抽取进货结算单
+     * 每月1日0时定期执行-cron表达式
+     */
+    @Scheduled(cron = "0 0 0 1 * ?")
+    @RequestMapping("/incomingStatement")
+    public String incomingStatement() {
+        String msg = "success";
+        try {
+            //日期相关数据
+            DateInfo date = DateUtil.dateData();
+            Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
+            List<Tvoucher> tvoucherList = new ArrayList<>();
+            List<TvoucherEntry> tvoucherEntryList = new ArrayList<>();
+            List<Object> list01 = map.get("voucher");
+            List<Object> list02 = map.get("voucherEntry");
+            for (Object obj : list01) {
+                tvoucherList = (List<Tvoucher>) obj;
+            }
+            for(Object obj : list02) {
+                tvoucherEntryList = (List<TvoucherEntry>)obj;
+            }
+            incomingStatementService.insertIncomingStatementVoucher(tvoucherList,tvoucherEntryList);
+        } catch (Exception e) {
+            e.getMessage();
         }
         return msg;
     }

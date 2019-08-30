@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.IncomingStatementBSDao">
+    <select id="getVoucher" resultType="map">
+        SELECT
+            JHJSD.DJBH,
+            JHJSD.RQ,
+            JHJSD.YDJH,
+            JHJSD.QDDM,
+            JHJSD.DM1,
+            JHJSD.DM2,
+            JHJSD.YGDM,
+            JHJSD.DM4,
+            JHJSD.RQ_1,
+            JHJSD.RQ_2,
+            JHJSD.JE_1,
+            JHJSD.DAYS,
+            JHJSD.SL,
+            JHJSD.JE_3,
+            JHJSD.JE_2,
+            JHJSD.JE,
+            JHJSD.JZR,
+            JHJSD.JZRQ,
+            JHJSD.JZ,
+            JHJSD.ZSR,
+            JHJSD.ZSRQ,
+            JHJSD.ZS,
+            JHJSD.JSR,
+            JHJSD.JSRQ,
+            JHJSD.JS,
+            JHJSD.ZDR,
+            JHJSD.RQ_4,
+            JHJSD.BZ
+        FROM
+            JHJSD
+        WHERE
+            RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
+        ORDER BY
+            RQ,
+            JHJSD.DJBH ASC
+    </select>
+
+    <select id="getVoucherEntry" resultType="map">
+        SELECT
+            JHJSDMP.DJBH,
+            JHJSDMP.DJXZ,
+            JHJSDMP.LXDJ,
+            JHJSDMP.RQ,
+            JHJSDMP.SPDM,
+            JHJSDMP.SL,
+            JHJSDMP.JE_2,
+            JHJSDMP.JE_3,
+            JHJSDMP.JE,
+            JHJSDMP.BYZD8,
+            JHJSDMP.BZ,
+            JHJSDMP.BYZD4,
+            JHJSDMP.MIBH
+        FROM
+            JHJSDMP
+        WHERE
+            DJBH = #{DJBH}
+    </select>
+
+    <select id="getGHSMC" resultType="map">
+        SELECT GHSMC FROM GONGHUOSHANG WHERE GHSDM = #{dm1}
+    </select>
+
+    <select id="getCKMC" resultType="map">
+        SELECT CKMC FROM CANGKU WHERE CKDM = #{dm2}
+    </select>
+</mapper>
