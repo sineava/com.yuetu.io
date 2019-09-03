@@ -51,6 +51,15 @@ tVoucherEntry表:
 - [x] 商品退货单
 > 借: 供货商(核算项目:应收账款);贷: 仓库(核算项目:库存商品)
 
+#### 监控sql
+- 凭证sql新增(金蝶K3监控)
+```
+    -- 凭证插入
+    exec sp_executesql N'INSERT INTO t_VoucherEntry (FVoucherID,FEntryID,FExplanation,FAccountID,FCurrencyID,FExchangeRateType,FExchangeRate,FDC,FAmountFor,FAmount,FQuantity,FMeasureUnitID,FUnitPrice,FInternalInd,FAccountID2,FSettleTypeID,FSettleNo,FCashFlowItem,FTaskID,FResourceID,FTransNo,FDetailID) VALUES (@P1,@P2,@P3,@P4,@P5,@P6,@P7,@P8,@P9,@P10,@P11,@P12,@P13,@P14,@P15,@P16,@P17,@P18,@P19,@P20,@P21,@P22)',N'@P1 int,@P2 int,@P3 varchar(255),@P4 int,@P5 int,@P6 float,@P7 float,@P8 int,@P9 money,@P10 money,@P11 float,@P12 int,@P13 float,@P14 varchar(10),@P15 int,@P16 int,@P17 varchar(255),@P18 int,@P19 int,@P20 int,@P21 varchar(255),@P22 int',225,0,'测试数据001',1046,1,1,1,1,$1.0000,$1.0000,0,0,0,NULL,1039,0,NULL,0,0,0,NULL,128
+    -- 凭证分录插入
+    exec sp_executesql N'INSERT INTO t_Voucher (FDate,FTransDate,FYear,FPeriod,FGroupID,FNumber,FReference,FExplanation,FAttachments,FEntryCount,FDebitTotal,FCreditTotal,FInternalInd,FChecked,FPosted,FPreparerID,FCheckerID,FPosterID,FCashierID,FHandler,FObjectName,FParameter,FSerialNum,FTranType,FOwnerGroupID) VALUES (@P1,@P2,@P3,@P4,@P5,@P6,@P7,@P8,@P9,@P10,@P11,@P12,@P13,@P14,@P15,@P16,@P17,@P18,@P19,@P20,@P21,@P22,@P23,@P24,@P25)',N'@P1 datetime,@P2 datetime,@P3 int,@P4 int,@P5 int,@P6 int,@P7 varchar(255),@P8 varchar(255),@P9 int,@P10 int,@P11 money,@P12 money,@P13 varchar(10),@P14 bit,@P15 bit,@P16 int,@P17 int,@P18 int,@P19 int,@P20 varchar(50),@P21 varchar(100),@P22 varchar(100),@P23 int,@P24 int,@P25 int','2014-02-28 00:00:00','2014-02-28 00:00:00',2014,2,4,44,NULL,'测试数据001',0,2,$1.0000,$1.0000,NULL,0,0,16394,-1,-1,-1,NULL,NULL,NULL,183,0,1
+```
+
 #### 相关文件
 - [ERP开发科目清理](http://t.cn/AiQSS7k0)
 - [百盛数据字典](http://t.cn/AiQSoLTt)
