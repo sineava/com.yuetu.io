@@ -79,7 +79,11 @@
 
     <select id="selectFItemID" resultType="map">
         -- 此处的5表示"仓库"-关联的是t_ItemClass表
-        select FItemID from t_item where FFullName = #{debit} and FItemClassID = 5;
+        SELECT TOP
+            1 detailV.FDetailID
+        FROM
+            t_ItemDetailV detailV
+                INNER JOIN ( SELECT FItemID FROM t_Item WHERE FFullName = #{credit} AND FItemClassID = 5) AS t1 ON t1.FItemID = detailV.FItemID
     </select>
 
     <insert id="addVoucherEntry">

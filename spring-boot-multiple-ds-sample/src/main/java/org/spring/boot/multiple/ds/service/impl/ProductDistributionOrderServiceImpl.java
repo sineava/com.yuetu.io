@@ -135,7 +135,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("摘要");
@@ -166,7 +166,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
@@ -274,7 +274,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("摘要");
@@ -305,7 +305,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
