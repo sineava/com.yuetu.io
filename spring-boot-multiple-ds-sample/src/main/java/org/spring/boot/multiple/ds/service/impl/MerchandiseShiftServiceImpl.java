@@ -93,7 +93,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 //摘要
                 tvoucherEntry.setFExplanation("摘要");
                 //余额方向 0-贷方,1- 借方
-                tvoucherEntry.setFDC("0");
+                tvoucherEntry.setFDC("1");
                 //金额（原币）
                 tvoucherEntry.setFAmountFor(String.valueOf(map.get("CBJE")));
                 //金额(本位币)
@@ -135,7 +135,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("摘要");
@@ -154,7 +154,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
             //分录号
             tvoucherEntryTotal.setFEntryID(String.valueOf(i));
             //余额方向 0-贷方,1- 借方
-            tvoucherEntryTotal.setFDC("1");
+            tvoucherEntryTotal.setFDC("o");
             merchandiseShiftKingDeeDao.addVoucherEntry(tvoucherEntryTotal);
             i++;
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
@@ -166,7 +166,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
@@ -177,6 +177,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
                     //分录号
                     tVoucherEntry.setFEntryID(String.valueOf(i));
                     merchandiseShiftKingDeeDao.addVoucherEntry(tVoucherEntry);
+                    System.out.println(tVoucherEntry);
                     i++;
                 }
             }
