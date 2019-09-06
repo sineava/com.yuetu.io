@@ -392,7 +392,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntry.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntry.setFDC("1");
+            tvoucherEntry.setFDC("0");
             //金额（原币）
             tvoucherEntry.setFAmountFor(String.valueOf(map.get("F6")));
             //金额(本位币)
@@ -477,7 +477,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntryTotal.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntryTotal.setFDC("0");
+            tvoucherEntryTotal.setFDC("1");
             //金额（原币）
             tvoucherEntryTotal.setFAmountFor(tvoucher.getFDebitTotal());
             //金额(本位币)
@@ -505,9 +505,9 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //仓库名称
             tvoucherEntryTotal.setCKMC(tvoucher.getCKMC());
             //科目内码
-            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectAccountsPayable());
+            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectStockGoods());
             //对方科目
-            tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectStockGoods());
+            tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectAccountsPayable());
             //凭证内码
             tvoucherEntryTotal.setFVoucherID(FVoucherID);
             //分录号
@@ -526,9 +526,9 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
                         tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
-                    tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
+                    tVoucherEntry.setFAccountID(ymlProp.getSubjectAccountsPayable());
                     //对方科目
-                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectAccountsPayable());
+                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectStockGoods());
                     //凭证内码
                     tVoucherEntry.setFVoucherID(FVoucherID);
                     //分录号
