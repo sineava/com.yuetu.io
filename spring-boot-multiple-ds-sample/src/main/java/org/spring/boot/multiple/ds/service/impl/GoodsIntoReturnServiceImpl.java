@@ -143,7 +143,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntry.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntry.setFDC("1");
+            tvoucherEntry.setFDC("0");
             //金额（原币）
             tvoucherEntry.setFAmountFor(String.valueOf(map.get("F6")));
             //金额(本位币)
@@ -188,7 +188,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
     @TargetDataSource("ds1")
     @Override
     public int insertGoodsReceiptVoucher(List<Tvoucher> tVoucherList, List<TvoucherEntry> tVoucherEntryList) {
-        log.info("进入goodsReceiptVoucherEntry方法,插入商品进货单数据到金蝶凭证");
+        log.info("进入insertGoodsReceiptVoucher方法,插入商品进货单数据到金蝶凭证");
         for(Tvoucher tvoucher  : tVoucherList) {
             //查询最后插入的数据-没有自增主键,只能这么获取了
             Tvoucher obj = goodsIntoReturnKingDeeDao.selectLastVoucher();
@@ -210,13 +210,13 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //贷方数据
             TvoucherEntry tvoucherEntryTotal = new TvoucherEntry();
             //根据仓库名称查询id,放入核算项目
-            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC());
+            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC(),"5");
             if(ckId == null || ckId.isEmpty()) {
                 //核算项目
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(ckId.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(ckId.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("");
@@ -227,7 +227,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntryTotal.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntryTotal.setFDC("0");
+            tvoucherEntryTotal.setFDC("1");
             //金额（原币）
             tvoucherEntryTotal.setFAmountFor(tvoucher.getFDebitTotal());
             //金额(本位币)
@@ -255,9 +255,9 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //仓库名称
             tvoucherEntryTotal.setCKMC(tvoucher.getCKMC());
             //科目内码
-            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectAccountsPayable());
+            tvoucherEntryTotal.setFAccountID(ymlProp.getSubjectStockGoods());
             //对方科目
-            tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectStockGoods());
+            tvoucherEntryTotal.setFAccountID2(ymlProp.getSubjectAccountsPayable());
             //凭证内码
             tvoucherEntryTotal.setFVoucherID(FVoucherID);
             //分录号
@@ -267,18 +267,18 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
                 if(tvoucher.getCKMC().equals(tVoucherEntry.getCKMC())) {
                     //根据供货商名称查询id,放入核算项目
-                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
+                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC(),"8");
                     if(ghsId == null || ghsId.isEmpty()) {
                         //核算项目
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
-                    tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
+                    tVoucherEntry.setFAccountID(ymlProp.getSubjectAccountsPayable());
                     //对方科目
-                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectAccountsPayable());
+                    tVoucherEntry.setFAccountID2(ymlProp.getSubjectStockGoods());
                     //凭证内码
                     tVoucherEntry.setFVoucherID(FVoucherID);
                     //分录号
@@ -392,7 +392,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntry.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntry.setFDC("0");
+            tvoucherEntry.setFDC("1");
             //金额（原币）
             tvoucherEntry.setFAmountFor(String.valueOf(map.get("F6")));
             //金额(本位币)
@@ -460,13 +460,13 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //贷方数据
             TvoucherEntry tvoucherEntryTotal = new TvoucherEntry();
             //根据仓库名称查询id,放入核算项目
-            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC());
+            Map<String,Object> ckId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tvoucher.getCKMC(),"5");
             if(ckId == null || ckId.isEmpty()) {
                 //核算项目
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(ckId.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(ckId.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("");
@@ -477,7 +477,7 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             //费率
             tvoucherEntryTotal.setFExchangeRate("1");
             //余额方向 0-贷方,1- 借方
-            tvoucherEntryTotal.setFDC("1");
+            tvoucherEntryTotal.setFDC("0");
             //金额（原币）
             tvoucherEntryTotal.setFAmountFor(tvoucher.getFDebitTotal());
             //金额(本位币)
@@ -517,13 +517,13 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
                 if(tvoucher.getCKMC().equals(tVoucherEntry.getCKMC())) {
                     //根据供货商名称查询id,放入核算项目
-                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC());
+                    Map<String,Object> ghsId = (Map<String, Object>) goodsIntoReturnKingDeeDao.selectFNumber(tVoucherEntry.getGHSMC(),"8");
                     if(ghsId == null || ghsId.isEmpty()) {
                         //核算项目
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());

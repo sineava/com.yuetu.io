@@ -139,6 +139,11 @@
     </update>
 
     <select id="selectFNumber" resultType="map">
-        select top 1 FItemID from t_item where FFullName = #{debit};
+        -- FItemClassID:用于区分类别,否则子表可能出现多条数据,导致数据错误
+        SELECT TOP
+            1 detailV.FDetailID
+        FROM
+            t_ItemDetailV detailV
+                INNER JOIN ( SELECT FItemID FROM t_Item WHERE FName = #{name} AND FItemClassID = #{item}) AS t1 ON t1.FItemID = detailV.FItemID
     </select>
 </mapper>

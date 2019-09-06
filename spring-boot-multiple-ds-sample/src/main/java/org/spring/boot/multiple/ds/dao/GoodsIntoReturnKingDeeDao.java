@@ -1,5 +1,6 @@
 package org.spring.boot.multiple.ds.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.spring.boot.multiple.ds.bean.Tvoucher;
 import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,8 @@ public interface GoodsIntoReturnKingDeeDao {
 
     /**
      * 根据字段值查询编号
+     * item: 核算项目类别<exp>5表示仓库;8表示供货商</exp>
      * @return
      */
-    Object selectFNumber(String name);
+    Object selectFNumber(@Param("name") String name, @Param("item") String item);
 }
