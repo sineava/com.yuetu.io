@@ -8,10 +8,11 @@ target/
 .project
 .settings
 .springBeans
-.idea
+yuetu.log
 
 ### IntelliJ IDEA ###
 .idea
+.log
 *.iws
 *.iml
 *.ipr
