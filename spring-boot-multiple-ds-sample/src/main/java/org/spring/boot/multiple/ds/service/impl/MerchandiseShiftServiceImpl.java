@@ -154,7 +154,7 @@ public class MerchandiseShiftServiceImpl implements MerchandiseShiftService {
             //分录号
             tvoucherEntryTotal.setFEntryID(String.valueOf(i));
             //余额方向 0-贷方,1- 借方
-            tvoucherEntryTotal.setFDC("o");
+            tvoucherEntryTotal.setFDC("0");
             merchandiseShiftKingDeeDao.addVoucherEntry(tvoucherEntryTotal);
             i++;
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
