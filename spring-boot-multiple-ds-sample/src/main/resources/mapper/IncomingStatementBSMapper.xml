@@ -18,7 +18,8 @@
             JHJSD.SL,
             JHJSD.JE_3,
             JHJSD.JE_2,
-            JHJSD.JE,
+            -- 金额取绝对值并保留两位小数
+            ABS(CAST(JHJSD.JE AS DECIMAL(32, 2))) JE,
             JHJSD.JZR,
             JHJSD.JZRQ,
             JHJSD.JZ,
@@ -50,7 +51,8 @@
             JHJSDMP.SL,
             JHJSDMP.JE_2,
             JHJSDMP.JE_3,
-            JHJSDMP.JE,
+            -- 金额取绝对值并保留两位小数
+            ABS(CAST(JHJSDMP.JE AS DECIMAL(32, 2))) JE,
             JHJSDMP.BYZD8,
             JHJSDMP.BZ,
             JHJSDMP.BYZD4,

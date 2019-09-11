@@ -50,6 +50,7 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
         List<Tvoucher> tvoucherList = new ArrayList<>();
         //凭证分录集合
         List<TvoucherEntry> tvoucherEntryList = new ArrayList<>();
+        //查询凭证所需数据
         List<Object> list = incomingStatementBSDao.getVoucher(date);
         for(Object obj : list) {
             if(!ObjectUtils.isEmpty(obj)) {
@@ -93,7 +94,7 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
                 //汇总数据
                 TvoucherEntry tvoucherEntryTotal = VoucherUtil.getVoucherEntry();
                 //摘要
-                tvoucherEntryTotal.setFExplanation("摘要");
+                tvoucherEntryTotal.setFExplanation("");
                 //金额（原币）
                 tvoucherEntryTotal.setFAmountFor(voucher.getFDebitTotal());
                 //金额(本位币)
@@ -106,18 +107,9 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
                 tvoucherEntryTotal.setIsSummary("1");
                 /**单据编号-用于数据关联*/
                 tvoucherEntryTotal.setDjbh(DJBH);
-                BigDecimal decimal = new BigDecimal(voucher.getFDebitTotal());
-                int result = decimal.compareTo(BigDecimal.ZERO);
-                if(result == 1) { //金额小于0
-                    tvoucherEntryTotal.setFDC("0");
-                } else if(result == -1) { //金额大于0
-                    tvoucherEntryTotal.setFDC("1");
-                } else {
-                    continue;
-                }
-                /**放入凭证分录集合*/
-                tvoucherEntryList.add(tvoucherEntryTotal);
                 i++;
+                //确定总数据金额方向
+                String jefx = "";
                 for(Object objEntry : ls) {
                     if(!ObjectUtils.isEmpty(objEntry)) {
                         TvoucherEntry tvoucherEntry = VoucherUtil.getVoucherEntry();
@@ -127,12 +119,14 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
                         if("0".equals(djxz)) {
                             //余额方向 0-贷方,1- 借方
                             tvoucherEntry.setFDC("1");
+                            jefx = "1";
                         } else if("1".equals(djxz)) {
                             //余额方向 0-贷方,1- 借方
                             tvoucherEntry.setFDC("0");
+                            jefx = "0";
                         }
                         //摘要
-                        tvoucherEntry.setFExplanation("摘要");
+                        tvoucherEntry.setFExplanation("");
                         //金额（原币）
                         tvoucherEntry.setFAmountFor(String.valueOf(mapEntry.get("JE")));
                         //金额(本位币)
@@ -152,6 +146,15 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
                         tvoucherEntryList.add(tvoucherEntry);
                     }
                 }
+                if("0".equals(jefx)) {
+                    //余额方向 0-贷方,1- 借方
+                    tvoucherEntryTotal.setFDC("1");
+                } else if("1".equals(jefx)) {
+                    //余额方向 0-贷方,1- 借方
+                    tvoucherEntryTotal.setFDC("0");
+                }
+                /**放入凭证分录集合*/
+                tvoucherEntryList.add(tvoucherEntryTotal);
                 /**放入凭证集合*/
                 tvoucherList.add(voucher);
             }
@@ -179,30 +182,30 @@ public class IncomingStatementServiceImpl implements incomingStatementService {
             //插入凭证数据到金蝶系统
             incomingStatementKingDeeDao.addVoucher(tvoucher);
             //根据供货商名称查询FItemID
-            Map<String,Object> ghsFItemID = (Map<String, Object>)incomingStatementKingDeeDao.selectFItemID(tvoucher.getGHSMC());
+            Map<String,Object> ghsFDetailID = (Map<String, Object>)incomingStatementKingDeeDao.selectDetailID(tvoucher.getGHSMC(),"8");
             //根据仓库名称查询FItemID
-            Map<String,Object> ckFItemid = (Map<String, Object>)incomingStatementKingDeeDao.selectFItemID(tvoucher.getGHSMC());
+            Map<String,Object> ckFDetailId = (Map<String, Object>)incomingStatementKingDeeDao.selectDetailID(tvoucher.getCKMC(),"5");
             for(TvoucherEntry tVoucherEntry : tVoucherEntryList) {
                 if(tVoucherEntry.getDjbh().equals(tvoucher.getDjbh())) {
                     if(tVoucherEntry.getIsSummary() == "1") {
-                        if(ghsFItemID == null || ghsFItemID.isEmpty()) {
+                        if(ghsFDetailID == null || ghsFDetailID.isEmpty()) {
                             //核算项目
                             tVoucherEntry.setFDetailID("0");
                         } else {
                             //核算项目
-                            tVoucherEntry.setFDetailID(String.valueOf(ghsFItemID.get("FItemID")));
+                            tVoucherEntry.setFDetailID(String.valueOf(ghsFDetailID.get("FDetailID")));
                         }
                         //科目内码
                         tVoucherEntry.setFAccountID(ymlProp.getSubjectAccountsPayable());
                         //对方科目
                         tVoucherEntry.setFAccountID2(ymlProp.getSubjectStockGoods());
                     } else if(tVoucherEntry.getIsSummary() == "0") {
-                        if(ghsFItemID == null || ghsFItemID.isEmpty()) {
+                        if(ghsFDetailID == null || ghsFDetailID.isEmpty()) {
                             //核算项目
                             tVoucherEntry.setFDetailID("0");
                         } else {
                             //核算项目
-                            tVoucherEntry.setFDetailID(String.valueOf(ckFItemid.get("FItemID")));
+                            tVoucherEntry.setFDetailID(String.valueOf(ckFDetailId.get("FDetailID")));
                         }
                         //科目内码
                         tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());

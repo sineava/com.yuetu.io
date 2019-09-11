@@ -77,10 +77,13 @@
         )
     </insert>
 
-    <select id="selectFItemID" resultType="map">
-        -- 此处的5表示"仓库"-关联的是t_ItemClass表
-        -- 此处的1表示"客户"-关联的是t_ItemClass表
-        select FItemID from t_item where FFullName = #{val};
+    <select id="selectDetailID" resultType="map">
+        -- FItemClassID:用于区分类别,否则子表可能出现多条数据,导致数据错误
+        SELECT TOP
+            1 detailV.FDetailID
+        FROM
+            t_ItemDetailV detailV
+                INNER JOIN ( SELECT FItemID FROM t_Item WHERE FName = #{val} AND FItemClassID = #{item}) AS t1 ON t1.FItemID = detailV.FItemID
     </select>
 
     <insert id="addVoucherEntry">

@@ -1,5 +1,6 @@
 package org.spring.boot.multiple.ds.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.spring.boot.multiple.ds.bean.Tvoucher;
 import org.spring.boot.multiple.ds.bean.TvoucherEntry;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ public interface IncomingStatementKingDeeDao {
      * @param val
      * @return
      */
-    Object selectFItemID(String val);
+    Object selectDetailID(@Param("val") String val, @Param("item") String item);
 
     /**
      * 新增凭证分录数据
