@@ -68,7 +68,7 @@ public class YueTuController {
                 goodsIntoReturnService.insertGoodsReceiptVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品进货单");
             } else {
-                msg = "本月商品进货单凭证已经抽取完成,不能重复抽取";
+                msg = "本月商品进货单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -95,7 +95,7 @@ public class YueTuController {
                 goodsIntoReturnService.insertGoodsReturnReceiptVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品退货单");
             } else {
-                msg = "本月商品退货单凭证已经抽取完成,不能重复抽取";
+                msg = "本月商品退货单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -104,7 +104,7 @@ public class YueTuController {
     }
 
     /**
-     * 抽取商品移仓单单据
+     * 抽取商品移仓单单据--移入
      * 每月1日0时定期执行-cron表达式
      */
     @Scheduled(cron = "0 0 0 1 * ?")
@@ -122,13 +122,42 @@ public class YueTuController {
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品移仓单");
             } else {
-                msg = "本月商品移仓单凭证已经抽取完成,不能重复抽取";
+                msg = "本月商品移仓单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
         }
         return msg;
     }
+
+    /**
+     * 抽取商品移仓单单据--移出
+     * 每月1日0时定期执行-cron表达式
+     */
+    @SuppressWarnings(value = "all")
+    @Scheduled(cron = "0 0 0 1 * ?")
+    @RequestMapping("/merchandiseShiftOutVoucher")
+    public String merchandiseShiftOutVoucher() {
+        String msg = "success";
+        Boolean isExtract = isExtract("商品移仓单");
+        try {
+            //单据未抽取才能进行单据抽取
+            if(!isExtract) {
+                //日期相关数据
+                DateInfo date = DateUtil.dateData();
+                List<Tvoucher> tVoucherList = merchandiseShiftService.merchandiseShiftOutVoucher(date);
+                List<TvoucherEntry> tVoucherEntryList = merchandiseShiftService.merchandiseShiftOutVoucherEntry(date);
+                merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
+                isExtractService.changeExtractStatus("商品移仓单");
+            } else {
+                msg = "本月商品移仓单据已经抽取完成,不能重复抽取";
+            }
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+        return msg;
+    }
+
 
     /**
      * 抽取商店配货单单据
@@ -149,7 +178,7 @@ public class YueTuController {
                 productDistributionOrderService.insertProductDistributionOrderVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商店配货单");
             } else {
-                msg = "本月商店配货单凭证已经抽取完成,不能重复抽取";
+                msg = "本月商店配货单单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -176,7 +205,7 @@ public class YueTuController {
                 productDistributionOrderService.insertStoreReturnOrderVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商店退货单");
             } else {
-                msg = "本月商店退货单凭证已经抽取完成,不能重复抽取";
+                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -192,28 +221,21 @@ public class YueTuController {
     @RequestMapping("/incomingStatement")
     public String incomingStatement() {
         String msg = "success";
-        Boolean isExtract = isExtract("进货结算单");
         try {
-            //单据未抽取才能进行单据抽取
-            if(!isExtract) {
-                //日期相关数据
-                DateInfo date = DateUtil.dateData();
-                Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
-                List<Tvoucher> tvoucherList = new ArrayList<>();
-                List<TvoucherEntry> tvoucherEntryList = new ArrayList<>();
-                List<Object> list01 = map.get("voucher");
-                List<Object> list02 = map.get("voucherEntry");
-                for (Object obj : list01) {
-                    tvoucherList = (List<Tvoucher>) obj;
-                }
-                for(Object obj : list02) {
-                    tvoucherEntryList = (List<TvoucherEntry>)obj;
-                }
-                incomingStatementService.insertIncomingStatementVoucher(tvoucherList,tvoucherEntryList);
-                isExtractService.changeExtractStatus("进货结算单");
-            } else {
-                msg = "本月进货结算单凭证已经抽取完成,不能重复抽取";
+            //日期相关数据
+            DateInfo date = DateUtil.dateData();
+            Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
+            List<Tvoucher> tvoucherList = new ArrayList<>();
+            List<TvoucherEntry> tvoucherEntryList = new ArrayList<>();
+            List<Object> list01 = map.get("voucher");
+            List<Object> list02 = map.get("voucherEntry");
+            for (Object obj : list01) {
+                tvoucherList = (List<Tvoucher>) obj;
             }
+            for(Object obj : list02) {
+                tvoucherEntryList = (List<TvoucherEntry>)obj;
+            }
+            incomingStatementService.insertIncomingStatementVoucher(tvoucherList,tvoucherEntryList);
         } catch (Exception e) {
             e.getMessage();
         }
