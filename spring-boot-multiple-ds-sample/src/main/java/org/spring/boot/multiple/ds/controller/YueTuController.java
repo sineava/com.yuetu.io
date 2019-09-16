@@ -150,7 +150,7 @@ public class YueTuController {
                 List<Tvoucher> tVoucherList = merchandiseShiftService.merchandiseShiftOutVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = merchandiseShiftService.merchandiseShiftOutVoucherEntry(date);
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
-                isExtractService.changeExtractStatus("商品移仓单");
+                isExtractService.changeExtractStatus("商品移仓单移出");
             } else {
                 msg = "本月商品移仓单据已经抽取完成,不能重复抽取";
             }

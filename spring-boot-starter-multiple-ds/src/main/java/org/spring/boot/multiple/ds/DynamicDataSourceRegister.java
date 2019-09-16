@@ -158,7 +158,6 @@ public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar,
         mpv.addPropertyValue("targetDataSources", targetDataSource);
         registry.registerBeanDefinition("dataSource", beanDefinition);
 
-
     }
 
 
