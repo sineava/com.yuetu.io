@@ -8,7 +8,6 @@ import org.spring.boot.multiple.ds.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,21 +16,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * EnableScheduling:开启定时任务
  * @author 刘世杰
- * GoodsIntoReturnService:商品进退货
- * MerchandiseShiftService:商品移仓单
- * productDistributionOrderService:商店配货退货单
- * incomingStatementService: 进货结算单
- * <explain>
+ * @EnableScheduling 开启定时任务
+ * {@link #goodsReceiptVoucher}:商品进货单据
+ * {@link #goodsReturnReceipt}:商品退货单据
+ * {@link #merchandiseShiftVoucher}:商品移仓单据
+ * {@link #productDistributionOrderVoucher}:商店配货单据
+ * {@link #storeReturnOrderVoucher}:商店退货单据
+ * {@link #incomingStatement}:进货结算单
+ * <em>
  * 商场销售抽取时间段: [上个月26日,本月25日]
  * 商场销售外抽取时间段: [上个月1日,上个月最后1日]
- * <explain/>
+ * </em>
  */
 @SuppressWarnings("unchecked")
 @EnableScheduling
 @RestController
-@Component
 public class YueTuController {
 
     @Autowired
@@ -50,13 +50,17 @@ public class YueTuController {
     private incomingStatementService incomingStatementService;
 
     /**
+     * default msg
+     */
+    private static String msg = "SUCCESS";
+
+    /**
      * 抽取商品进货单据
      * 每月1日0时定期执行-cron表达式
      */
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/goodsReceiptVoucher")
     public String goodsReceiptVoucher() {
-        String msg = "success";
         try {
             Boolean isExtract = isExtract("商品进货单");
             //单据未抽取才能进行单据抽取
@@ -83,7 +87,6 @@ public class YueTuController {
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/goodsReturnReceiptVoucher")
     public String goodsReturnReceipt() {
-        String msg = "success";
         Boolean isExtract = isExtract("商品退货单");
         try {
             //单据未抽取才能进行单据抽取
@@ -110,7 +113,6 @@ public class YueTuController {
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/merchandiseShiftVoucher")
     public String merchandiseShiftVoucher() {
-        String msg = "success";
         Boolean isExtract = isExtract("商品移仓单");
         try {
             //单据未抽取才能进行单据抽取
@@ -166,7 +168,6 @@ public class YueTuController {
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/productDistributionOrderVoucher")
     public String productDistributionOrderVoucher() {
-        String msg = "success";
         Boolean isExtract = isExtract("商店配货单");
         try {
             //单据未抽取才能进行单据抽取
@@ -193,7 +194,6 @@ public class YueTuController {
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/storeReturnOrderVoucher")
     public String storeReturnOrderVoucher() {
-        String msg = "success";
         Boolean isExtract = isExtract("商店退货单");
         try {
             //单据未抽取才能进行单据抽取
@@ -220,7 +220,7 @@ public class YueTuController {
     @Scheduled(cron = "0 0 0 1 * ?")
     @RequestMapping("/incomingStatement")
     public String incomingStatement() {
-        String msg = "success";
+        Boolean isExtract = isExtract("进货结算单");
         try {
             //日期相关数据
             DateInfo date = DateUtil.dateData();
@@ -244,6 +244,8 @@ public class YueTuController {
 
     /**
      * 判断本月该类单据是否抽取完成
+     *
+     * <strong>"1":本次单据已经抽取;"0":本次单据未抽取</strong>
      * @return
      */
     private Boolean isExtract(String type) {
