@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.GoodsIntoReturnBSDao" >
+
+    <!-- 查询tvoucher所需数据  -->
+    <select id="generatePurchase" resultType="map">
+        SELECT COUNT
+                   ( TOTAL ) AS TOTAL,
+               CKMC,
+               SUM ( SJJE ) AS SJJE
+        FROM
+            (
+                SELECT COUNT
+                           ( temp.CKMC ) TOTAL,
+                       temp.CKMC,
+                       SUM ( temp.F6 ) AS SJJE
+                FROM
+                    (
+                        SELECT
+                            QDMC,
+                            CKMC,
+                            RQ,
+                            SHRQ,
+                            DJMC,
+                            DJBH,
+                            YDJH,
+                            GHSDM,
+                            GHSMC,
+                            CKDM,
+                            YGMC,
+                            ZDR,
+                            ZY,
+                            SPMC,
+                            SX8MC,
+                            SUM ( SL ) F5,
+                            SUM ( JE ) F6
+                        FROM
+                            (
+                                SELECT
+                                    VW_SPJHMX.RQ,
+                                    VW_SPJHMX.SHRQ,
+                                    VW_SPJHMX.DJMC,
+                                    VW_SPJHMX.DJBH,
+                                    VW_SPJHMX.YDJH,
+                                    QUDAO.QDMC,
+                                    GONGHUOSHANG.GHSDM,
+                                    GONGHUOSHANG.GHSMC,
+                                    CANGKU.CKDM,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    VW_SPJHMX.ZDR,
+                                    VW_SPJHMX.ZY,
+                                    SHANGPIN.SPMC,
+                                    FJSX8.SXMC AS SX8MC,
+                                    SUM ( VW_SPJHMX.SL ) AS SL,
+                                    SUM ( VW_SPJHMX.JE ) AS JE
+                                FROM
+                                    VW_SPJHMX
+                                        LEFT JOIN FZXX ON VW_SPJHMX.FZXX = FZXX.FZDM
+                                        LEFT JOIN PICI ON VW_SPJHMX.PCDM = PICI.PCDM,
+                                    GONGHUOSHANG,
+                                    CANGKU,
+                                    SHANGPIN
+                                        LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM = SHANGPIN.SPDM
+                                        LEFT JOIN GONGHUOSHANG GHS ON SHANGPIN_A.GHSDM = GHS.GHSDM,
+                                    QUDAO ( NOLOCK ),
+                                    YUANGONG ( NOLOCK ),
+                                    FJSX8 ( NOLOCK )
+                                WHERE
+                                    VW_SPJHMX.DM1 = GONGHUOSHANG.GHSDM
+                                  AND VW_SPJHMX.DM2 = CANGKU.CKDM
+                                  AND VW_SPJHMX.SPDM = SHANGPIN.SPDM
+                                  AND QUDAO.QDDM = VW_SPJHMX.QDDM
+                                  AND VW_SPJHMX.YGDM = YUANGONG.YGDM
+                                  AND SHANGPIN.FJSX8 = FJSX8.SXDM
+                                  AND VW_SPJHMX.RQ BETWEEN #{ lastMonthFirstDay }
+                                    AND #{ lastMonthLastDay }
+                                GROUP BY
+                                    VW_SPJHMX.RQ,
+                                    VW_SPJHMX.SHRQ,
+                                    VW_SPJHMX.DJMC,
+                                    VW_SPJHMX.DJBH,
+                                    VW_SPJHMX.YDJH,
+                                    QUDAO.QDMC,
+                                    GONGHUOSHANG.GHSDM,
+                                    GONGHUOSHANG.GHSMC,
+                                    CANGKU.CKDM,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    VW_SPJHMX.ZDR,
+                                    VW_SPJHMX.ZY,
+                                    SHANGPIN.SPMC,
+                                    FJSX8.SXMC
+                            ) AS T1
+                        GROUP BY
+                            QDMC,
+                            CKMC,
+                            RQ,
+                            SHRQ,
+                            DJMC,
+                            DJBH,
+                            YDJH,
+                            GHSDM,
+                            GHSMC,
+                            CKDM,
+                            YGMC,
+                            ZDR,
+                            ZY,
+                            SPMC,
+                            SX8MC
+                    ) AS temp
+                WHERE
+                    temp.DJMC = '商品进货单'
+                GROUP BY
+                    GHSMC,
+                    DJMC,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    CKMC
+            ) AS t2
+        GROUP BY
+            CKMC
+    </select>
+
+    <!-- 查询分录所需数据 -->
+    <select id="selectEntry" resultType="map">
+        SELECT
+            temp.GHSMC,
+            temp.CKMC,
+            SUM ( temp.F6 ) AS F6
+        FROM
+            (
+                SELECT
+                    QDMC,
+                    CKMC,
+                    RQ,
+                    SHRQ,
+                    DJMC,
+                    DJBH,
+                    YDJH,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    YGMC,
+                    ZDR,
+                    ZY,
+                    SPMC,
+                    SX8MC,
+                    SUM ( SL ) F5,
+                    SUM ( JE ) F6
+                FROM
+                    (
+                        SELECT
+                            VW_SPJHMX.RQ,
+                            VW_SPJHMX.SHRQ,
+                            VW_SPJHMX.DJMC,
+                            VW_SPJHMX.DJBH,
+                            VW_SPJHMX.YDJH,
+                            QUDAO.QDMC,
+                            GONGHUOSHANG.GHSDM,
+                            GONGHUOSHANG.GHSMC,
+                            CANGKU.CKDM,
+                            CANGKU.CKMC,
+                            YUANGONG.YGMC,
+                            VW_SPJHMX.ZDR,
+                            VW_SPJHMX.ZY,
+                            SHANGPIN.SPMC,
+                            FJSX8.SXMC AS SX8MC,
+                            SUM ( VW_SPJHMX.SL ) AS SL,
+                            SUM ( VW_SPJHMX.JE ) AS JE
+                        FROM
+                            VW_SPJHMX
+                                LEFT JOIN FZXX ON VW_SPJHMX.FZXX = FZXX.FZDM
+                                LEFT JOIN PICI ON VW_SPJHMX.PCDM = PICI.PCDM,
+                            GONGHUOSHANG,
+                            CANGKU,
+                            SHANGPIN
+                                LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM = SHANGPIN.SPDM
+                                LEFT JOIN GONGHUOSHANG GHS ON SHANGPIN_A.GHSDM = GHS.GHSDM,
+                            QUDAO ( NOLOCK ),
+                            YUANGONG ( NOLOCK ),
+                            FJSX8 ( NOLOCK )
+                        WHERE
+                            VW_SPJHMX.DM1 = GONGHUOSHANG.GHSDM
+                          AND VW_SPJHMX.DM2 = CANGKU.CKDM
+                          AND VW_SPJHMX.SPDM = SHANGPIN.SPDM
+                          AND QUDAO.QDDM = VW_SPJHMX.QDDM
+                          AND VW_SPJHMX.YGDM = YUANGONG.YGDM
+                          AND SHANGPIN.FJSX8 = FJSX8.SXDM
+                          AND VW_SPJHMX.RQ BETWEEN #{lastMonthFirstDay} and #{lastMonthLastDay}
+                        GROUP BY
+                            VW_SPJHMX.RQ,
+                            VW_SPJHMX.SHRQ,
+                            VW_SPJHMX.DJMC,
+                            VW_SPJHMX.DJBH,
+                            VW_SPJHMX.YDJH,
+                            QUDAO.QDMC,
+                            GONGHUOSHANG.GHSDM,
+                            GONGHUOSHANG.GHSMC,
+                            CANGKU.CKDM,
+                            CANGKU.CKMC,
+                            YUANGONG.YGMC,
+                            VW_SPJHMX.ZDR,
+                            VW_SPJHMX.ZY,
+                            SHANGPIN.SPMC,
+                            FJSX8.SXMC
+                    ) AS T1
+                GROUP BY
+                    QDMC,
+                    CKMC,
+                    RQ,
+                    SHRQ,
+                    DJMC,
+                    DJBH,
+                    YDJH,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    YGMC,
+                    ZDR,
+                    ZY,
+                    SPMC,
+                    SX8MC
+            ) AS temp
+        WHERE
+            temp.DJMC = '商品进货单'
+        GROUP BY
+            QDMC,
+            CKMC,
+            RQ,
+            SHRQ,
+            DJMC,
+            DJBH,
+            YDJH,
+            GHSDM,
+            GHSMC,
+            CKDM,
+            YGMC,
+            ZDR,
+            ZY,
+            SPMC,
+            SX8MC
+        ORDER BY
+            CKMC
+    </select>
+
+    <select id="returnGoodsVoucher" resultType="map">
+        SELECT COUNT
+                   ( TOTAL ) AS TOTAL,
+               CKMC,
+               SUM ( SJJE ) AS SJJE
+        FROM
+            (
+                SELECT COUNT
+                           ( temp.CKMC ) TOTAL,
+                       temp.CKMC,
+                       SUM ( temp.F6 ) AS SJJE
+                FROM
+                    (
+                        SELECT
+                            QDMC,
+                            CKMC,
+                            RQ,
+                            datepart( YEAR, RQ ) F1,
+                            datepart( quarter, RQ ) F2,
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ) F3,
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ) F4,
+                            SHRQ,
+                            DJMC,
+                            DJBH,
+                            YDJH,
+                            GHSDM,
+                            GHSMC,
+                            CKDM,
+                            YGMC,
+                            ZDR,
+                            ZY,
+                            SPMC,
+                            SX8MC,
+                            ABS( SUM ( SL ) ) F5,
+                            ABS( SUM ( JE ) ) F6
+                        FROM
+                            (
+                                SELECT
+                                    VW_SPJHMX.RQ,
+                                    VW_SPJHMX.SHRQ,
+                                    VW_SPJHMX.DJMC,
+                                    VW_SPJHMX.DJBH,
+                                    VW_SPJHMX.YDJH,
+                                    QUDAO.QDMC,
+                                    GONGHUOSHANG.GHSDM,
+                                    GONGHUOSHANG.GHSMC,
+                                    CANGKU.CKDM,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    VW_SPJHMX.ZDR,
+                                    VW_SPJHMX.ZY,
+                                    SHANGPIN.SPMC,
+                                    FJSX8.SXMC AS SX8MC,
+                                    SUM ( VW_SPJHMX.SL ) AS SL,
+                                    SUM ( VW_SPJHMX.JE ) AS JE
+                                FROM
+                                    VW_SPJHMX
+                                        LEFT JOIN FZXX ON VW_SPJHMX.FZXX = FZXX.FZDM
+                                        LEFT JOIN PICI ON VW_SPJHMX.PCDM = PICI.PCDM,
+                                    GONGHUOSHANG,
+                                    CANGKU,
+                                    SHANGPIN
+                                        LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM = SHANGPIN.SPDM
+                                        LEFT JOIN GONGHUOSHANG GHS ON SHANGPIN_A.GHSDM = GHS.GHSDM,
+                                    QUDAO ( NOLOCK ),
+                                    YUANGONG ( NOLOCK ),
+                                    FJSX8 ( NOLOCK )
+                                WHERE
+                                    VW_SPJHMX.DM1 = GONGHUOSHANG.GHSDM
+                                  AND VW_SPJHMX.DM2 = CANGKU.CKDM
+                                  AND VW_SPJHMX.SPDM = SHANGPIN.SPDM
+                                  AND QUDAO.QDDM = VW_SPJHMX.QDDM
+                                  AND VW_SPJHMX.YGDM = YUANGONG.YGDM
+                                  AND SHANGPIN.FJSX8 = FJSX8.SXDM
+                                  AND VW_SPJHMX.RQ  BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
+                                GROUP BY
+                                    VW_SPJHMX.RQ,
+                                    VW_SPJHMX.SHRQ,
+                                    VW_SPJHMX.DJMC,
+                                    VW_SPJHMX.DJBH,
+                                    VW_SPJHMX.YDJH,
+                                    QUDAO.QDMC,
+                                    GONGHUOSHANG.GHSDM,
+                                    GONGHUOSHANG.GHSMC,
+                                    CANGKU.CKDM,
+                                    CANGKU.CKMC,
+                                    YUANGONG.YGMC,
+                                    VW_SPJHMX.ZDR,
+                                    VW_SPJHMX.ZY,
+                                    SHANGPIN.SPMC,
+                                    FJSX8.SXMC
+                            ) AS v1
+                        GROUP BY
+                            QDMC,
+                            CKMC,
+                            RQ,
+                            datepart( YEAR, RQ ),
+                            datepart( quarter, RQ ),
+                            str( datepart( MONTH, RQ ) / 10, 1 ) + str( datepart( MONTH, RQ ) % 10, 1 ),
+                            str( datepart( week, RQ ) / 10, 1 ) + str( datepart( week, RQ ) % 10, 1 ),
+                            SHRQ,
+                            DJMC,
+                            DJBH,
+                            YDJH,
+                            GHSDM,
+                            GHSMC,
+                            CKDM,
+                            YGMC,
+                            ZDR,
+                            ZY,
+                            SPMC,
+                            SX8MC
+                    ) AS temp
+                WHERE
+                    temp.DJMC = '商品退货单'
+                GROUP BY
+                    GHSMC,
+                    DJMC,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    CKMC
+            ) AS t2
+        GROUP BY
+            CKMC
+    </select>
+
+    <!-- 查询分录所需数据 -->
+    <select id="returnGoodsVoucherEntry" resultType="map">
+        SELECT
+            temp.GHSMC,
+            temp.CKMC,
+            SUM (temp.F6) AS F6
+        FROM
+            (
+                SELECT
+                    QDMC,
+                    CKMC,
+                    RQ,
+                    datepart(YEAR, RQ) F1,
+                    datepart(quarter, RQ) F2,
+                    SHRQ,
+                    DJMC,
+                    DJBH,
+                    YDJH,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    YGMC,
+                    ZDR,
+                    ZY,
+                    SPMC,
+                    SX8MC,
+                    ABS(SUM(SL)) F5,
+                    ABS(SUM(JE)) F6
+                FROM
+                    (
+                        SELECT
+                            VW_SPJHMX.RQ,
+                            VW_SPJHMX.SHRQ,
+                            VW_SPJHMX.DJMC,
+                            VW_SPJHMX.DJBH,
+                            VW_SPJHMX.YDJH,
+                            QUDAO.QDMC,
+                            GONGHUOSHANG.GHSDM,
+                            GONGHUOSHANG.GHSMC,
+                            CANGKU.CKDM,
+                            CANGKU.CKMC,
+                            YUANGONG.YGMC,
+                            VW_SPJHMX.ZDR,
+                            VW_SPJHMX.ZY,
+                            SHANGPIN.SPMC,
+                            FJSX8.SXMC AS SX8MC,
+                            SUM (VW_SPJHMX.SL) AS SL,
+                            SUM (VW_SPJHMX.JE) AS JE
+                        FROM
+                            VW_SPJHMX
+                                LEFT JOIN FZXX ON VW_SPJHMX.FZXX = FZXX.FZDM
+                                LEFT JOIN PICI ON VW_SPJHMX.PCDM = PICI.PCDM,
+                            GONGHUOSHANG,
+                            CANGKU,
+                            SHANGPIN
+                                LEFT JOIN SHANGPIN_A ON SHANGPIN_A.SPDM = SHANGPIN.SPDM
+                                LEFT JOIN GONGHUOSHANG GHS ON SHANGPIN_A.GHSDM = GHS.GHSDM,
+                            QUDAO (NOLOCK),
+                            YUANGONG (NOLOCK),
+                            FJSX8 (NOLOCK)
+                        WHERE
+                            VW_SPJHMX.DM1 = GONGHUOSHANG.GHSDM
+                          AND VW_SPJHMX.DM2 = CANGKU.CKDM
+                          AND VW_SPJHMX.SPDM = SHANGPIN.SPDM
+                          AND QUDAO.QDDM = VW_SPJHMX.QDDM
+                          AND VW_SPJHMX.YGDM = YUANGONG.YGDM
+                          AND SHANGPIN.FJSX8 = FJSX8.SXDM
+                          AND VW_SPJHMX.RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
+                        GROUP BY
+                            VW_SPJHMX.RQ,
+                            VW_SPJHMX.SHRQ,
+                            VW_SPJHMX.DJMC,
+                            VW_SPJHMX.DJBH,
+                            VW_SPJHMX.YDJH,
+                            QUDAO.QDMC,
+                            GONGHUOSHANG.GHSDM,
+                            GONGHUOSHANG.GHSMC,
+                            CANGKU.CKDM,
+                            CANGKU.CKMC,
+                            YUANGONG.YGMC,
+                            VW_SPJHMX.ZDR,
+                            VW_SPJHMX.ZY,
+                            SHANGPIN.SPMC,
+                            FJSX8.SXMC
+                    ) AS v1
+                GROUP BY
+                    QDMC,
+                    CKMC,
+                    RQ,
+                    datepart(YEAR, RQ),
+                    datepart(quarter, RQ),
+                    SHRQ,
+                    DJMC,
+                    DJBH,
+                    YDJH,
+                    GHSDM,
+                    GHSMC,
+                    CKDM,
+                    YGMC,
+                    ZDR,
+                    ZY,
+                    SPMC,
+                    SX8MC
+            ) AS temp
+        WHERE
+            temp.DJMC = '商品退货单'
+        GROUP BY
+            QDMC,
+            CKMC,
+            RQ,
+            SHRQ,
+            DJMC,
+            DJBH,
+            YDJH,
+            GHSDM,
+            GHSMC,
+            CKDM,
+            YGMC,
+            ZDR,
+            ZY,
+            SPMC,
+            SX8MC
+        ORDER BY
+            CKMC
+    </select>
+</mapper>

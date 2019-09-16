@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.spring.boot.multiple.ds.dao.GoodsIntoReturnKingDeeDao" >
-    <insert id="insertPurchase">
+<mapper namespace="org.spring.boot.multiple.ds.dao.IncomingStatementKingDeeDao">
+    <select id="selectLastVoucher" resultType="org.spring.boot.multiple.ds.bean.Tvoucher">
+        select top 1 * from t_voucher order by FVoucherID DESC;
+    </select>
+
+    <insert id="addVoucher">
         INSERT INTO t_Voucher
-             (FDate,  -- 凭证日期
-              FTransDate, -- 业务日期
-              FVoucherID,
-              FYear, -- FYear
-              FPeriod, -- 会计期间
-              FGroupID, -- 摘要组内码
-              FNumber, -- 摘要编码
-              FReference, -- 参考信息
-              FExplanation, -- 摘要
-              FAttachments, -- 附件张数
-              FEntryCount, -- 分录数
-              FDebitTotal, -- 借方金额合计
-              FCreditTotal, -- 贷方金额合计
-              FInternalInd, -- 空-手工凭证,非空-机制凭证
-              FChecked, -- 0-未审核,1-已审核
-              FPosted, -- 0-未过账,1-已过账
-              FPreparerID, -- 制单人
-              FCheckerID, -- 审核人
-              FPosterID, -- 记账人
-              FCashierID, -- 出纳员
-              FHandler, -- 会计主管
-              FObjectName, -- 其他系统传入凭证对象接口描述
-              FParameter, -- 接口参数
-              FSerialNum, -- 凭证序号
-              FTranType, -- 单据类型
-              FOwnerGroupID, -- 制单人所属工作组
-              FBrNo,
-              FFrameWorkID,
-              FApproveID,
-              FFootNote,
-              FLink,
-              UUID
-              )
+        (FDate,  -- 凭证日期
+         FTransDate, -- 业务日期
+         FVoucherID,
+         FYear, -- FYear
+         FPeriod, -- 会计期间
+         FGroupID, -- 摘要组内码
+         FNumber, -- 摘要编码
+         FReference, -- 参考信息
+         FExplanation, -- 摘要
+         FAttachments, -- 附件张数
+         FEntryCount, -- 分录数
+         FDebitTotal, -- 借方金额合计
+         FCreditTotal, -- 贷方金额合计
+         FInternalInd, -- 空-手工凭证,非空-机制凭证
+         FChecked, -- 0-未审核,1-已审核
+         FPosted, -- 0-未过账,1-已过账
+         FPreparerID, -- 制单人
+         FCheckerID, -- 审核人
+         FPosterID, -- 记账人
+         FCashierID, -- 出纳员
+         FHandler, -- 会计主管
+         FObjectName, -- 其他系统传入凭证对象接口描述
+         FParameter, -- 接口参数
+         FSerialNum, -- 凭证序号
+         FTranType, -- 单据类型
+         FOwnerGroupID, -- 制单人所属工作组
+         FBrNo,
+         FFrameWorkID,
+         FApproveID,
+         FFootNote,
+         FLink,
+         UUID
+        )
         VALUES
-            (
+        (
             #{FDate}, -- 凭证日期
             #{FTransDate}, -- 业务日期
             #{FVoucherID},
@@ -70,14 +74,19 @@
             '',
             0,
             newid()
-            );
+        )
     </insert>
 
-    <select id="selectLastVoucher" resultType="org.spring.boot.multiple.ds.bean.Tvoucher">
-        select top 1 * from t_voucher order by FVoucherID DESC;
+    <select id="selectDetailID" resultType="map">
+        -- FItemClassID:用于区分类别,否则子表可能出现多条数据,导致数据错误
+        SELECT TOP
+            1 detailV.FDetailID
+        FROM
+            t_ItemDetailV detailV
+                INNER JOIN ( SELECT FItemID FROM t_Item WHERE FName = #{val} AND FItemClassID = #{item}) AS t1 ON t1.FItemID = detailV.FItemID
     </select>
 
-    <insert id="insertVoucherEntry">
+    <insert id="addVoucherEntry">
         INSERT INTO t_VoucherEntry (
             FVoucherID,
             FEntryID,
@@ -128,17 +137,4 @@
             #{FDetailID}
         )
     </insert>
-
-    <update id="updateVoucher">
-        UPDATE t_voucher
-        SET
-            Fnumber = FVoucherID,
-            FSerialNum = FVoucherID
-        WHERE
-            FVoucherID = #{FVoucherID}
-    </update>
-
-    <select id="selectFNumber" resultType="map">
-        select top 1 FItemID from t_item where FFullName = #{debit};
-    </select>
 </mapper>

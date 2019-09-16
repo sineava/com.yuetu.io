@@ -118,7 +118,7 @@
         AND CANGKU1.QYDM= QUYU.QYDM
         AND VW_SDPHMX.YGDM= YUANGONG.YGDM
         AND VW_SDPHMX.DM4= FHLX.LXDM
-        AND VW_SDPHMX.RQ BETWEEN '2019-07-23' AND '2019-08-22'
+        AND VW_SDPHMX.RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
         GROUP BY
         VW_SDPHMX.RQ,
         VW_SDPHMX.DJMC,
@@ -308,7 +308,7 @@
         AND CANGKU1.QYDM= QUYU.QYDM
         AND VW_SDPHMX.YGDM= YUANGONG.YGDM
         AND VW_SDPHMX.DM4= FHLX.LXDM
-        AND VW_SDPHMX.RQ BETWEEN '2019-07-23' AND '2019-08-22'
+        AND VW_SDPHMX.RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
         GROUP BY
         VW_SDPHMX.RQ,
         VW_SDPHMX.DJMC,
@@ -496,7 +496,7 @@
                                   AND CANGKU1.QYDM= QUYU.QYDM
                                   AND VW_SDPHMX.YGDM= YUANGONG.YGDM
                                   AND VW_SDPHMX.DM4= FHLX.LXDM
-                                  AND VW_SDPHMX.RQ BETWEEN '2019-07-24' AND '2019-08-23'
+                                  AND VW_SDPHMX.RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
                                 GROUP BY
                                     VW_SDPHMX.RQ,
                                     VW_SDPHMX.DJMC,
@@ -685,7 +685,7 @@
                                   AND CANGKU1.QYDM= QUYU.QYDM
                                   AND VW_SDPHMX.YGDM= YUANGONG.YGDM
                                   AND VW_SDPHMX.DM4= FHLX.LXDM
-                                  AND VW_SDPHMX.RQ BETWEEN '2019-07-23' AND '2019-08-22'
+                                  AND VW_SDPHMX.RQ BETWEEN #{lastMonthFirstDay} AND #{lastMonthLastDay}
                                 GROUP BY
                                     VW_SDPHMX.RQ,
                                     VW_SDPHMX.DJMC,

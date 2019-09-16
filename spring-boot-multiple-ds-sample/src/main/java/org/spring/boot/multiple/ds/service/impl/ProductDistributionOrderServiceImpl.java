@@ -56,9 +56,9 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 Map<String,Object> map = (Map<String, Object>)obj;
                 Tvoucher voucher = VoucherUtil.getVoucher();
                 //凭证日期
-                voucher.setFDate(dateInfo.getCurrentMonth25());
+                voucher.setFDate(dateInfo.getCurrentTime());
                 //业务日期
-                voucher.setFTransDate(dateInfo.getCurrentMonth25());
+                voucher.setFTransDate(dateInfo.getCurrentTime());
                 //年份
                 voucher.setFYear(dateInfo.getCurrentYear());
                 //会计期间
@@ -135,7 +135,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("摘要");
@@ -166,7 +166,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());
@@ -195,9 +195,9 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 Map<String,Object> map = (Map<String, Object>)obj;
                 Tvoucher voucher = VoucherUtil.getVoucher();
                 //凭证日期
-                voucher.setFDate(dateInfo.getCurrentMonth25());
+                voucher.setFDate(dateInfo.getCurrentTime());
                 //业务日期
-                voucher.setFTransDate(dateInfo.getCurrentMonth25());
+                voucher.setFTransDate(dateInfo.getCurrentTime());
                 //年份
                 voucher.setFYear(dateInfo.getCurrentYear());
                 //会计期间
@@ -274,7 +274,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                 tvoucherEntryTotal.setFDetailID("0");
             } else {
                 //核算项目
-                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FItemID")));
+                tvoucherEntryTotal.setFDetailID(String.valueOf(fItemid.get("FDetailID")));
             }
             //摘要
             tvoucherEntryTotal.setFExplanation("摘要");
@@ -305,7 +305,7 @@ public class ProductDistributionOrderServiceImpl implements ProductDistributionO
                         tVoucherEntry.setFDetailID("0");
                     } else {
                         //核算项目
-                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FItemID")));
+                        tVoucherEntry.setFDetailID(String.valueOf(ghsId.get("FDetailID")));
                     }
                     //科目内码
                     tVoucherEntry.setFAccountID(ymlProp.getSubjectStockGoods());

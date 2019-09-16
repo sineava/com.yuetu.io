@@ -53,4 +53,16 @@ public class TvoucherEntry {
      */
     private String debit;
     private String credit;
+
+    /**
+     * add 2019/8/30
+     * djbh: 通过单据编号将凭证List以及凭证分录List进行汇总
+     */
+    private String djbh;
+
+    /**
+     * add 2019/8/30
+     * isSummary: 用于判断是否是汇总数据 0-否 1-是
+     */
+    private String isSummary;
 }
