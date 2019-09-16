@@ -21,11 +21,18 @@ public interface MerchandiseShiftService {
     List<Tvoucher> merchandiseShiftVoucher(DateInfo date) throws Exception;
 
     /**
-     * 商品移仓单-查询凭证分录所需数据(百盛)
+     * 商品移仓单-查询凭证分录所需数据(百盛)--移入
      * @param date:抽取日期
      * @return
      */
     List<TvoucherEntry> merchandiseShiftVoucherEntry(DateInfo date) throws Exception;
+
+    /**
+     * 商品移仓单-查询凭证分录所需数据(百盛)--移出
+     */
+      List<Tvoucher> merchandiseShiftOutVoucher(DateInfo date) throws Exception;
+
+     List<TvoucherEntry>  merchandiseShiftOutVoucherEntry(DateInfo date) throws  Exception;
 
     /**
      * 商品移仓单-插入凭证数据(金蝶)

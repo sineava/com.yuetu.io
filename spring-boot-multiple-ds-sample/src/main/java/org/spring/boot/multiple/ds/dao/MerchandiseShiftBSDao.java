@@ -26,4 +26,8 @@ public interface MerchandiseShiftBSDao {
      * @return
      */
     List<Object> getVoucherEntry(DateInfo date);
+
+    List<Object> RemoveVoucher(DateInfo date);
+
+    List<Object> RemoveVoucherEntry(DateInfo date);
 }
