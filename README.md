@@ -6,17 +6,17 @@ technology stack: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</co
 #### 说明: 
 > 结算项目更改请直接在resources/application.yml中直接进行配置,降低代码耦合度
 
-```
+```yml
 - 重要表列举(待补充)
-    t_voucher:凭证表
-    t_voucherEntry:凭证分录表
-    
-    t_itemPropDesc:核算项目附表信息描述表
-    t_itemDetailV:核算项目使用详情纵表
-    t_itemDetail:核算项目使用详情横表
-    t_item:核算项目表
-    t_itemClass:核算项目类别表
-    t_account:科目表
+t_voucher:凭证表
+t_voucherEntry:凭证分录表
+
+t_itemPropDesc:核算项目附表信息描述表
+t_itemDetailV:核算项目使用详情纵表
+t_itemDetail:核算项目使用详情横表
+t_item:核算项目表
+t_itemClass:核算项目类别表
+t_account:科目表
 
 - 重要字段说明
 t_itemClass表:
