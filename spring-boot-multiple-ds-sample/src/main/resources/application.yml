@@ -9,5 +9,5 @@ prop:
 # 日志打印
 logging:
   level: info
- # file: yuetu.log
+ file: yuetu.log
   root: INFO
