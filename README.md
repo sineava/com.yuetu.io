@@ -2,22 +2,21 @@
 ![](https://img.shields.io/badge/JDK-1.8-green.svg)
 ![](https://img.shields.io/badge/release-1.0-blue.svg)
 ---
-
 technology stack: <code>lombok</code>,<code>spring-boot</code>,<code>mybatis</code>,<code>druid</code>
 #### 说明: 
 > 结算项目更改请直接在resources/application.yml中直接进行配置,降低代码耦合度
 
 ```yml
 - 重要表列举(待补充)
-t_voucher:凭证表
-t_voucherEntry:凭证分录表
+t_voucher: 凭证表
+t_voucherEntry: 凭证分录表
 
-t_itemPropDesc:核算项目附表信息描述表
-t_itemDetailV:核算项目使用详情纵表
-t_itemDetail:核算项目使用详情横表
-t_item:核算项目表
-t_itemClass:核算项目类别表
-t_account:科目表
+t_itemPropDesc: 核算项目附表信息描述表
+t_itemDetailV: 核算项目使用详情纵表
+t_itemDetail: 核算项目使用详情横表
+t_item: 核算项目表
+t_itemClass: 核算项目类别表
+t_account: 科目表
 
 - 重要字段说明
 t_itemClass表:
@@ -33,12 +32,15 @@ t_itemClass表:
 tVoucherEntry表:
     FDetail: 核算项目使用ID，0为不下设核算项目
         ## id来源:t_itemDetailV表下FDetailID字段
-        -- 根据t_item:FName > t_item:FitemID = t_itemDetailV:FItemID > t_itemDetailV:FDeatilID
+        ## 根据t_item:FName > t_item:FitemID = t_itemDetailV:FItemID > t_itemDetailV:FDeatilID
         此处使用的是t_itemDetailV:FDeatilID, fix:凭证抽取bug #1
 ```
 
 - [x] 商品移仓单(移入):百盛(分销系统/移仓数据分析)-已自测
 > 借: 移入仓(核算项目:库存商品);贷: 移出仓(核算项目:库存商品)
+
+- [x] 商品移仓单(移出):百盛(分销系统/移仓数据分析)-已自测
+> 借: 移出仓(核算项目:库存商品);贷: 移入仓(核算项目:库存商品)
 
 - [x] 商店配货单:百盛(分销系统/配货数据分析)-已自测
 > 借: 商店(核算项目:库存商品);贷: 仓库(核算项目:库存商品)
@@ -77,7 +79,7 @@ tVoucherEntry表:
 ---
 
 #### 待处理事项
-- 当不存在核算项目时(如供货商,仓库等),进行消息提示
+- 当不存在核算项目时(如供货商,仓库等),进行消息提示(客户需求)
 - 单据日期目前使用的是单据抽取的实际日期,需要与客户协商
 - 商店配货单在(2019-08-01 至 2019-08-31)发现一条分录数据为负,金额为-61.3
 

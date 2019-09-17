@@ -17,13 +17,14 @@ import java.util.Map;
 
 /**
  * @author 刘世杰
- * @EnableScheduling 开启定时任务
- * {@link #goodsReceiptVoucher}:商品进货单据
- * {@link #goodsReturnReceipt}:商品退货单据
- * {@link #merchandiseShiftVoucher}:商品移仓单据
- * {@link #productDistributionOrderVoucher}:商店配货单据
- * {@link #storeReturnOrderVoucher}:商店退货单据
- * {@link #incomingStatement}:进货结算单
+ * EnableScheduling:开启定时任务
+ * {@link #goodsReceiptVoucher()}:商品进货单据
+ * {@link #goodsReturnReceipt()}:商品退货单据
+ * {@link #merchandiseShiftVoucher()}:商品移仓单据(移入)
+ * {@link #merchandiseShiftOutVoucher()}:商品移仓单据(移出)
+ * {@link #productDistributionOrderVoucher()}:商店配货单据
+ * {@link #storeReturnOrderVoucher()}:商店退货单据
+ * {@link #incomingStatement()}:进货结算单
  * <em>
  * 商场销售抽取时间段: [上个月26日,本月25日]
  * 商场销售外抽取时间段: [上个月1日,上个月最后1日]
@@ -124,7 +125,7 @@ public class YueTuController {
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品移仓单");
             } else {
-                msg = "本月商品移仓单据已经抽取完成,不能重复抽取";
+                msg = "本月商品移仓单据(移入)已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -141,7 +142,7 @@ public class YueTuController {
     @RequestMapping("/merchandiseShiftOutVoucher")
     public String merchandiseShiftOutVoucher() {
         String msg = "success";
-        Boolean isExtract = isExtract("商品移仓单");
+        Boolean isExtract = isExtract("商品移仓单移出");
         try {
             //单据未抽取才能进行单据抽取
             if(!isExtract) {
@@ -152,7 +153,7 @@ public class YueTuController {
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品移仓单移出");
             } else {
-                msg = "本月商品移仓单据已经抽取完成,不能重复抽取";
+                msg = "本月商品移仓单据(移出)已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -222,20 +223,25 @@ public class YueTuController {
     public String incomingStatement() {
         Boolean isExtract = isExtract("进货结算单");
         try {
-            //日期相关数据
-            DateInfo date = DateUtil.dateData();
-            Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
-            List<Tvoucher> tvoucherList = new ArrayList<>();
-            List<TvoucherEntry> tvoucherEntryList = new ArrayList<>();
-            List<Object> list01 = map.get("voucher");
-            List<Object> list02 = map.get("voucherEntry");
-            for (Object obj : list01) {
-                tvoucherList = (List<Tvoucher>) obj;
+            if(!isExtract) {
+                //日期相关数据
+                DateInfo date = DateUtil.dateData();
+                Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
+                List<Tvoucher> tVoucherList = new ArrayList<>();
+                List<TvoucherEntry> tVoucherEntryList = new ArrayList<>();
+                List<Object> list01 = map.get("voucher");
+                List<Object> list02 = map.get("voucherEntry");
+                for (Object obj : list01) {
+                    tVoucherList = (List<Tvoucher>) obj;
+                }
+                for(Object obj : list02) {
+                    tVoucherEntryList = (List<TvoucherEntry>)obj;
+                }
+                incomingStatementService.insertIncomingStatementVoucher(tVoucherList,tVoucherEntryList);
+                isExtractService.changeExtractStatus("进货结算单");
+            } else {
+                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
             }
-            for(Object obj : list02) {
-                tvoucherEntryList = (List<TvoucherEntry>)obj;
-            }
-            incomingStatementService.insertIncomingStatementVoucher(tvoucherList,tvoucherEntryList);
         } catch (Exception e) {
             e.getMessage();
         }
@@ -244,12 +250,11 @@ public class YueTuController {
 
     /**
      * 判断本月该类单据是否抽取完成
-     *
      * <strong>"1":本次单据已经抽取;"0":本次单据未抽取</strong>
      * @return
      */
     private Boolean isExtract(String type) {
-        Boolean isExtract = false;
+        boolean isExtract = false;
         try {
             //判断单据是否存在表中
             Object obj = isExtractService.isExtract(type);
