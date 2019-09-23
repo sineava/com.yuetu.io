@@ -65,4 +65,10 @@ public class TvoucherEntry {
      * isSummary: 用于判断是否是汇总数据 0-否 1-是
      */
     private String isSummary;
+
+    /**
+     * add 2019/9/20
+     * khmc: 客户名称
+     */
+    private String khmc;
 }
