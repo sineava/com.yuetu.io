@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -301,7 +300,6 @@ public class GoodsIntoReturnServiceImpl implements GoodsIntoReturnService {
         log.info("进入goodsReturnReceiptVoucher方法,查询百盛商品退货单数据处理并生成单据集合");
         //百盛--商品退货单
         List<Object> list = goodsIntoReturnBsDao.returnGoodsVoucher(date);
-        Calendar cal = Calendar.getInstance();
         List<Tvoucher> tVoucherList = new ArrayList<>();
         DateInfo dateInfo = DateUtil.dateData();
         //插入tVoucher凭证
