@@ -68,4 +68,16 @@ public class Tvoucher {
      * djbh: 通过单据编号将凭证List以及凭证分录List进行汇总
      */
     private String djbh;
+
+    /**
+     * add 2019/9/20
+     * khmc: 客户名称
+     */
+    private String khmc;
+
+    /**
+     * add 2019/9/20
+     * skfs: 收款方式
+     */
+    private String skfs;
 }
