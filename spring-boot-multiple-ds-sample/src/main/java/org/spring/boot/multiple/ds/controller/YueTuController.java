@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author 刘世杰
@@ -50,10 +51,13 @@ public class YueTuController {
     @Autowired
     private incomingStatementService incomingStatementService;
 
+    @Autowired
+    private SalesReceiptService salesReceiptService;
+
     /**
      * default msg
      */
-    private static String msg = "SUCCESS";
+    private String msg = "SUCCESS";
 
     /**
      * 抽取商品进货单据
@@ -65,15 +69,15 @@ public class YueTuController {
         try {
             Boolean isExtract = isExtract("商品进货单");
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商品进货单据已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReceiptVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = goodsIntoReturnService.goodsReceiptVoucherEntry(date);
                 goodsIntoReturnService.insertGoodsReceiptVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品进货单");
-            } else {
-                msg = "本月商品进货单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -91,15 +95,15 @@ public class YueTuController {
         Boolean isExtract = isExtract("商品退货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商品退货单据已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = goodsIntoReturnService.goodsReturnReceiptVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = goodsIntoReturnService.goodsReturnVoucherEntry(date);
                 goodsIntoReturnService.insertGoodsReturnReceiptVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品退货单");
-            } else {
-                msg = "本月商品退货单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -117,15 +121,15 @@ public class YueTuController {
         Boolean isExtract = isExtract("商品移仓单");
         try {
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商品移仓单据(移入)已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = merchandiseShiftService.merchandiseShiftVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = merchandiseShiftService.merchandiseShiftVoucherEntry(date);
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品移仓单");
-            } else {
-                msg = "本月商品移仓单据(移入)已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -145,15 +149,15 @@ public class YueTuController {
         Boolean isExtract = isExtract("商品移仓单移出");
         try {
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                return "本月商品移仓单据(移出)已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = merchandiseShiftService.merchandiseShiftOutVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = merchandiseShiftService.merchandiseShiftOutVoucherEntry(date);
                 merchandiseShiftService.insertMerchandiseShiftVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商品移仓单移出");
-            } else {
-                msg = "本月商品移仓单据(移出)已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -172,15 +176,15 @@ public class YueTuController {
         Boolean isExtract = isExtract("商店配货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商店配货单单据已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = productDistributionOrderService.productDistributionOrderVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = productDistributionOrderService.productDistributionOrderVoucherEntry(date);
                 productDistributionOrderService.insertProductDistributionOrderVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商店配货单");
-            } else {
-                msg = "本月商店配货单单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -198,15 +202,15 @@ public class YueTuController {
         Boolean isExtract = isExtract("商店退货单");
         try {
             //单据未抽取才能进行单据抽取
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 List<Tvoucher> tVoucherList = productDistributionOrderService.storeReturnOrderVoucher(date);
                 List<TvoucherEntry> tVoucherEntryList = productDistributionOrderService.storeReturnOrderVoucherEntry(date);
                 productDistributionOrderService.insertStoreReturnOrderVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("商店退货单");
-            } else {
-                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
             msg = e.getMessage();
@@ -223,7 +227,9 @@ public class YueTuController {
     public String incomingStatement() {
         Boolean isExtract = isExtract("进货结算单");
         try {
-            if(!isExtract) {
+            if (isExtract) {
+                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
+            } else {
                 //日期相关数据
                 DateInfo date = DateUtil.dateData();
                 Map<String, List<Object>> map = incomingStatementService.incomingStatementVoucher(date);
@@ -239,11 +245,43 @@ public class YueTuController {
                 }
                 incomingStatementService.insertIncomingStatementVoucher(tVoucherList,tVoucherEntryList);
                 isExtractService.changeExtractStatus("进货结算单");
-            } else {
-                msg = "本月商店退货单单据已经抽取完成,不能重复抽取";
             }
         } catch (Exception e) {
-            e.getMessage();
+            msg = e.getMessage();
+        }
+        return msg;
+    }
+
+    /**
+     * 抽取销货收款单
+     * 每月1日0时定期执行-cron表达式
+     */
+    @Scheduled(cron = "0 0 0 1 * ?")
+    @RequestMapping("/salesReceipt")
+    public String salesReceipt() {
+        Boolean isExtract = isExtract("销货收款单");
+        try {
+            if (isExtract) {
+                msg = "本月销货收款单单据已经抽取完成,不能重复抽取";
+            } else {
+                //日期相关数据
+                DateInfo date = DateUtil.dateData();
+                Map<String, List<Object>> map = salesReceiptService.salesReceiptVoucher(date);
+                List<Tvoucher> tVoucherList = new ArrayList<>();
+                List<TvoucherEntry> tVoucherEntryList = new ArrayList<>();
+                List<Object> list01 = map.get("voucher");
+                List<Object> list02 = map.get("voucherEntry");
+                for (Object obj : list01) {
+                    tVoucherList = (List<Tvoucher>) obj;
+                }
+                for(Object obj : list02) {
+                    tVoucherEntryList = (List<TvoucherEntry>)obj;
+                }
+                salesReceiptService.insertSalesReceiptVoucher(tVoucherList,tVoucherEntryList);
+                isExtractService.changeExtractStatus("销货收款单");
+            }
+        } catch (Exception e) {
+            msg = e.getMessage();
         }
         return msg;
     }
@@ -261,7 +299,7 @@ public class YueTuController {
             if(obj != null) {
                 Map<String,String> map = (Map<String,String>)obj;
                 String str = map.get("isExtract");
-                if("1".equals(str.trim())) {
+                if(Objects.equals("1",str.trim())) {
                     isExtract = true;
                 }
             }

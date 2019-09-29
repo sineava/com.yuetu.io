@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.spring.boot.multiple.ds.dao.SalesReceiptBSDao">
+    <select id="getVoucher" resultType="map">
+        SELECT
+            -- 单据编号
+            XHSKD.DJBH,
+            -- 日期
+            XHSKD.RQ,
+            XHSKD.YDJH,
+            XHSKD.QDDM,
+            -- 客户代码
+            XHSKD.DM1,
+            -- 收款类型
+            XHSKD.FKLX,
+            -- 收款方式
+            XHSKD.DM2,
+            XHSKD.YGDM,
+            XHSKD.LXDJ,
+            XHSKD.SL,
+            -- 实际金额
+            XHSKD.SJJE,
+            XHSKD.WB,
+            XHSKD.WBHL,
+            XHSKD.DQQK,
+            XHSKD.chkDQQK,
+            XHSKD.JYJE,
+            XHSKD.JE,
+            XHSKD.JE_1,
+            XHSKD.JE_2,
+            XHSKD.SKJE,
+            XHSKD.ZCJE,
+            XHSKD.LXDM,
+            XHSKD.JZR,
+            XHSKD.JZRQ,
+            XHSKD.JZ,
+            XHSKD.JSR,
+            XHSKD.JSRQ,
+            XHSKD.JS,
+            XHSKD.ZSR,
+            XHSKD.ZSRQ,
+            XHSKD.ZS,
+            XHSKD.ZDR,
+            XHSKD.RQ_4,
+            XHSKD.DM3_1,
+            XHSKD.JE_3,
+            -- 备注
+            XHSKD.BZ,
+            XHSKD.BYZD2,
+            XHSKD.BYZD10,
+            XHSKD.BYZD16,
+            XHSKD.RQ_1,
+            XHSKD.BYZD17,
+            XHSKD.RQ_2
+        FROM
+            XHSKD
+        WHERE
+            RQ > '2019-07-01'
+        ORDER BY
+            RQ,
+            XHSKD.DJBH ASC
+    </select>
+
+    <select id="getVoucherEntry" resultType="map">
+        SELECT
+            XHSKDSKMX.DJBH,
+            XHSKDSKMX.SKZH,
+            XHSKDSKMX.SKJE,
+            XHSKDSKMX.ZCZH,
+            XHSKDSKMX.ZCJE,
+            XHSKDSKMX.BZ,
+            XHSKDSKMX.MIBH
+        FROM
+            XHSKDSKMX
+        WHERE
+            DJBH = #{djbh}
+    </select>
+
+    <select id="getKHMC" resultType="map">
+        SELECT TOP 1 KHMC FROM KEHU WHERE KHDM = #{dm1}
+    </select>
+
+    <select id="getZHMC" resultType="map">
+        SELECT ZHDM,ZHMC FROM YHZH WHERE ZHDM = #{skzh} AND QYBZ='1' and QDDM='000'
+    </select>
+</mapper>
